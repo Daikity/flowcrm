@@ -1,20 +1,22 @@
-import { AppLayout } from '@/widgets/app-layout'
+import { useNavigate } from 'react-router-dom'
+import { env } from '@/shared/config'
+import { Button, Typography } from '@/shared/ui'
 
 export function HomePage() {
+  const navigate = useNavigate()
+
   return (
-    <AppLayout>
-      <section className="mx-auto flex max-w-3xl flex-col gap-4 px-6 py-16">
-        <p className="text-sm font-medium uppercase tracking-wide text-slate-500">
-          FlowCRM
-        </p>
-        <h1 className="text-4xl font-semibold tracking-tight text-slate-900">
-          B2B Sales Management Platform
-        </h1>
-        <p className="text-lg text-slate-600">
-          Архитектура FSD готова. Добавляйте сущности, фичи и виджеты в
-          соответствующие слои.
-        </p>
-      </section>
-    </AppLayout>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-6">
+      <div className="flex max-w-lg flex-col items-center gap-6 text-center">
+        <Typography variant="display">{env.appName}</Typography>
+        <Typography muted>
+          B2B Sales Management Platform. Управляйте клиентами, сделками и задачами
+          в одном месте.
+        </Typography>
+        <Button size="lg" onClick={() => navigate('/login')}>
+          Sign in
+        </Button>
+      </div>
+    </div>
   )
 }

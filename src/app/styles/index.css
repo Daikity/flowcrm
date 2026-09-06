@@ -1,30 +1,141 @@
 @import 'tailwindcss';
 
-:root {
-  color-scheme: light;
-  font-family:
-    'Segoe UI',
-    system-ui,
-    -apple-system,
-    sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color: #0f172a;
-  background-color: #f8fafc;
+@theme {
+  --color-background: #f3f5f7;
+  --color-surface: #ffffff;
+  --color-surface-secondary: #e9eef3;
+  --color-border: #d5dde5;
+  --color-text-primary: #101828;
+  --color-text-secondary: #667085;
+  --color-primary: #2563eb;
+  --color-primary-foreground: #ffffff;
+  --color-success: #12b76a;
+  --color-warning: #f79009;
+  --color-danger: #e15a52;
+
+  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  --text-display: 2.5rem;
+  --text-display--line-height: 1.15;
+  --text-display--font-weight: 700;
+
+  --text-h1: 2rem;
+  --text-h1--line-height: 1.2;
+  --text-h1--font-weight: 700;
+
+  --text-h2: 1.5rem;
+  --text-h2--line-height: 1.3;
+  --text-h2--font-weight: 600;
+
+  --text-h3: 1.25rem;
+  --text-h3--line-height: 1.35;
+  --text-h3--font-weight: 600;
+
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.5;
+  --text-body--font-weight: 400;
+
+  --text-small: 0.8125rem;
+  --text-small--line-height: 1.45;
+  --text-small--font-weight: 400;
+
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.4;
+  --text-caption--font-weight: 500;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  /* Spacing scale: 4 / 8 / 12 / 16 / 24 / 32 / 48 — only these in UI */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-12: 3rem;
+
+  --shadow-card: 0 1px 2px rgb(16 24 40 / 0.04);
+  --shadow-overlay: 0 4px 16px rgb(16 24 40 / 0.08);
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    color: var(--color-text-primary);
+    background-color: var(--color-background);
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
 }
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-}
+@layer utilities {
+  .text-display {
+    font-size: var(--text-display);
+    line-height: var(--text-display--line-height);
+    font-weight: var(--text-display--font-weight);
+  }
 
-#root {
-  min-height: 100vh;
+  .text-h1 {
+    font-size: var(--text-h1);
+    line-height: var(--text-h1--line-height);
+    font-weight: var(--text-h1--font-weight);
+  }
+
+  .text-h2 {
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+    font-weight: var(--text-h2--font-weight);
+  }
+
+  .text-h3 {
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    font-weight: var(--text-h3--font-weight);
+  }
+
+  .text-body {
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    font-weight: var(--text-body--font-weight);
+  }
+
+  .text-small {
+    font-size: var(--text-small);
+    line-height: var(--text-small--line-height);
+    font-weight: var(--text-small--font-weight);
+  }
+
+  .text-caption {
+    font-size: var(--text-caption);
+    line-height: var(--text-caption--line-height);
+    font-weight: var(--text-caption--font-weight);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
 }
