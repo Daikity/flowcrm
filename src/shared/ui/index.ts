@@ -7,6 +7,8 @@ export {
 export { Avatar } from './avatar'
 export { Badge } from './badge'
 export { Button } from './button'
+export { Calendar } from './calendar'
+export { DatePicker } from './date-picker'
 export {
   Card,
   CardDescription,

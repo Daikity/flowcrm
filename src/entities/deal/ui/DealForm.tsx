@@ -2,7 +2,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { Customer } from '@/entities/customer'
 import type { User } from '@/entities/user'
-import { Button, Input, Select } from '@/shared/ui'
+import { Button, DatePicker, Input, Select } from '@/shared/ui'
 import {
   DEAL_STAGE_LABEL,
   DEAL_STAGE_PROBABILITY,
@@ -136,11 +136,18 @@ export function DealForm({
         {...register('probability')}
       />
 
-      <Input
-        label="Expected close date"
-        type="date"
-        error={errors.expectedCloseDate?.message}
-        {...register('expectedCloseDate')}
+      <Controller
+        name="expectedCloseDate"
+        control={control}
+        render={({ field }) => (
+          <DatePicker
+            label="Expected close date"
+            value={field.value}
+            onChange={field.onChange}
+            clearable={false}
+            error={errors.expectedCloseDate?.message}
+          />
+        )}
       />
 
       <div className="mt-2 flex justify-end gap-2">

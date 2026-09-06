@@ -8,6 +8,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  DatePicker,
   Dropdown,
   EmptyState,
   Input,
@@ -44,6 +45,7 @@ const colorTokens = [
 
 export function UiFoundationPage() {
   const [modalOpen, setModalOpen] = useState(false)
+  const [demoDate, setDemoDate] = useState('2026-03-15')
 
   return (
     <AppShell
@@ -120,7 +122,7 @@ export function UiFoundationPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Button / Input / Select</CardTitle>
+              <CardTitle>Button / Input / Select / DatePicker</CardTitle>
               <CardDescription>Базовые контролы формы</CardDescription>
             </CardHeader>
             <div className="flex flex-wrap items-end gap-3">
@@ -137,6 +139,12 @@ export function UiFoundationPage() {
                   { value: 'active', label: 'Active' },
                   { value: 'lead', label: 'Lead' },
                 ]}
+              />
+              <DatePicker
+                label="Date"
+                value={demoDate}
+                onChange={setDemoDate}
+                className="w-44"
               />
             </div>
           </Card>

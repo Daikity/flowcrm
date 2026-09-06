@@ -20,4 +20,5 @@ export {
   useGetTasksQuery,
   useUpdateTaskMutation,
 } from './tasksApi'
+export { reportsApi, useGetReportsQuery } from './reportsApi'
 export { usersApi, useGetUsersQuery } from './usersApi'

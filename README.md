@@ -63,6 +63,15 @@ UI → RTK Query → /api/* → MSW → mock data → cache → UI
 - URL query params, loading / error / empty, responsive
 - RTK Query cache invalidation + MSW stateful + тесты handlers
 
+### 5. Reports / Analytics
+
+- `GET /api/reports` — агрегация поверх deals (не отдельный CRUD)
+- фильтры: date range, owner, stage (в URL query params)
+- KPI: Revenue, Won Deals, Win Rate, Pipeline Value
+- Recharts: Area (revenue по месяцам) + Bar (pipeline by stage)
+- breakdown by owner, loading / error / empty, responsive
+- derived data в MSW + RTK Query + тесты handlers
+
 ## Команды
 
 ```bash
@@ -75,4 +84,4 @@ npm run test:run
 
 Демо-вход: `admin` / `admin`
 
-После входа: `/dashboard`, `/customers`, `/deals`, `/tasks`.
+После входа: `/dashboard`, `/customers`, `/deals`, `/tasks`, `/reports`.

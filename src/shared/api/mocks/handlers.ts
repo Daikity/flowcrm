@@ -13,6 +13,7 @@ import type {
   DealStage,
   UpdateDealInput,
 } from '@/entities/deal'
+import { DEAL_STAGES } from '@/entities/deal'
 import type {
   CreateTaskInput,
   TaskDueFilter,
@@ -40,6 +41,7 @@ import {
   paginateTasks,
   updateTaskAt,
 } from './tasks.logic'
+import { buildReportsData } from './reports.logic'
 
 const OPEN_STAGES = new Set(['lead', 'qualified', 'proposal', 'negotiation'])
 
@@ -47,6 +49,24 @@ export const handlers = [
   http.get('/api/dashboard', async () => {
     await delay(400)
     return HttpResponse.json(dashboardData)
+  }),
+
+  http.get('/api/reports', async ({ request }) => {
+    await delay(400)
+
+    const url = new URL(request.url)
+    const from = url.searchParams.get('from') ?? undefined
+    const to = url.searchParams.get('to') ?? undefined
+    const ownerId = url.searchParams.get('ownerId') ?? undefined
+    const stageParam = url.searchParams.get('stage')
+    const stage =
+      stageParam && DEAL_STAGES.includes(stageParam as DealStage)
+        ? (stageParam as DealStage)
+        : undefined
+
+    return HttpResponse.json(
+      buildReportsData({ from, to, ownerId, stage }),
+    )
   }),
 
   http.get('/api/users', async () => {

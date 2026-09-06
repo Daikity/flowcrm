@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import type { Customer } from '@/entities/customer'
 import type { DealListItem } from '@/entities/deal'
 import type { User } from '@/entities/user'
-import { Button, Input, Select } from '@/shared/ui'
+import { Button, DatePicker, Input, Select } from '@/shared/ui'
 import {
   TASK_PRIORITIES,
   TASK_PRIORITY_LABEL,
@@ -150,11 +150,18 @@ export function TaskForm({
         )}
       />
 
-      <Input
-        label="Due date"
-        type="date"
-        error={errors.dueDate?.message}
-        {...register('dueDate')}
+      <Controller
+        name="dueDate"
+        control={control}
+        render={({ field }) => (
+          <DatePicker
+            label="Due date"
+            value={field.value}
+            onChange={field.onChange}
+            clearable={false}
+            error={errors.dueDate?.message}
+          />
+        )}
       />
 
       <Controller
