@@ -1,0 +1,6 @@
+export { DealsTable } from './ui/DealsTable'
+export { DealsPagination } from './ui/DealsPagination'
+export { DealsEmpty } from './ui/DealsEmpty'
+export { DealsError } from './ui/DealsError'
+export { DealsSkeleton } from './ui/DealsSkeleton'
+export { DealsPipelineTotals } from './ui/DealsPipelineTotals'

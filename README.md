@@ -41,6 +41,18 @@ UI → RTK Query → /api/* → MSW → mock data → cache → UI
 - cache invalidation через RTK Query tags
 - desktop table + mobile cards
 
+### 3. Deals
+
+- list: `GET /api/deals`, create: `POST`, update: `PATCH`
+- search, фильтры по stage / owner, сортировка
+- pagination в Table view
+- переключатель Table / Kanban (одно и то же API, разный presentation)
+- Kanban по стадиям: Lead → Qualified → Proposal → Negotiation → Won / Lost
+- создание и редактирование сделки, смена stage через UI
+- расчёт totals по pipeline
+- loading / error / empty, responsive
+- RTK Query cache invalidation + MSW с мутацией mock dataset
+
 ## Команды
 
 ```bash
@@ -53,4 +65,4 @@ npm run test:run
 
 Демо-вход: `admin` / `admin`
 
-После входа: `/dashboard`, `/customers`.
+После входа: `/dashboard`, `/customers`, `/deals`.

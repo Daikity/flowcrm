@@ -1,6 +1,18 @@
-import type { Deal } from '@/entities/deal'
+import type { Deal, DealStage } from '@/entities/deal'
 
-export const deals: Deal[] = [
+const stages: DealStage[] = [
+  'lead',
+  'qualified',
+  'proposal',
+  'negotiation',
+  'won',
+  'lost',
+]
+
+const customerIds = ['cust-1', 'cust-2', 'cust-3', 'cust-4', 'cust-5']
+const ownerIds = ['user-1', 'user-2', 'user-3']
+
+const seedDeals: Deal[] = [
   {
     id: 'deal-1',
     title: 'Nordic Soft — Enterprise license',
@@ -68,3 +80,55 @@ export const deals: Deal[] = [
     createdAt: '2026-01-05T11:00:00.000Z',
   },
 ]
+
+const titles = [
+  'Platform expansion',
+  'Annual renewal',
+  'Integration package',
+  'Security add-on',
+  'Training bundle',
+  'Cloud migration',
+  'API access tier',
+  'Compliance module',
+]
+
+function buildGeneratedDeals(): Deal[] {
+  const generated: Deal[] = []
+
+  for (let i = 0; i < 24; i += 1) {
+    const stage = stages[i % stages.length]
+    const value = 8000 + (i % 12) * 7500
+    const probabilityByStage: Record<DealStage, number> = {
+      lead: 15 + (i % 3) * 5,
+      qualified: 35 + (i % 3) * 5,
+      proposal: 50 + (i % 3) * 5,
+      negotiation: 65 + (i % 3) * 5,
+      won: 100,
+      lost: 0,
+    }
+
+    generated.push({
+      id: `deal-gen-${i + 1}`,
+      title: `${titles[i % titles.length]} #${i + 1}`,
+      customerId: customerIds[i % customerIds.length],
+      ownerId: ownerIds[i % ownerIds.length],
+      value,
+      stage,
+      probability: probabilityByStage[stage],
+      expectedCloseDate: `2026-${String((i % 9) + 4).padStart(2, '0')}-${String((i % 27) + 1).padStart(2, '0')}`,
+      createdAt: new Date(Date.UTC(2025, 10, 1 + i)).toISOString(),
+    })
+  }
+
+  return generated
+}
+
+export let deals: Deal[] = [...seedDeals, ...buildGeneratedDeals()]
+
+export function resetDeals() {
+  deals = [...seedDeals, ...buildGeneratedDeals()]
+}
+
+export function setDeals(next: Deal[]) {
+  deals = next
+}

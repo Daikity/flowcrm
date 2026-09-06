@@ -8,4 +8,10 @@ export {
   useGetCustomersQuery,
   useUpdateCustomerMutation,
 } from './customersApi'
+export {
+  dealsApi,
+  useCreateDealMutation,
+  useGetDealsQuery,
+  useUpdateDealMutation,
+} from './dealsApi'
 export { usersApi, useGetUsersQuery } from './usersApi'

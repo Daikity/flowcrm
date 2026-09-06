@@ -8,11 +8,23 @@ import type {
   CustomerStatus,
   UpdateCustomerInput,
 } from '@/entities/customer'
+import type {
+  CreateDealInput,
+  DealStage,
+  UpdateDealInput,
+} from '@/entities/deal'
 import { activities } from './data/activities'
 import { customers, setCustomers } from './data/customers'
 import { dashboardData } from './data/dashboard'
-import { deals } from './data/deals'
+import { deals, setDeals } from './data/deals'
 import { users } from './data/users'
+import {
+  createDealFromBody,
+  enrichDeal,
+  filterAndSortDeals,
+  paginateDeals,
+  updateDealAt,
+} from './deals.logic'
 
 const OPEN_STAGES = new Set(['lead', 'qualified', 'proposal', 'negotiation'])
 
@@ -25,6 +37,52 @@ export const handlers = [
   http.get('/api/users', async () => {
     await delay(200)
     return HttpResponse.json(users)
+  }),
+
+  http.get('/api/deals', async ({ request }) => {
+    await delay(350)
+
+    const url = new URL(request.url)
+    const page = Math.max(1, Number(url.searchParams.get('page') ?? '1') || 1)
+    const limit = Math.max(1, Number(url.searchParams.get('limit') ?? '10') || 10)
+    const search = url.searchParams.get('search')?.trim().toLowerCase() ?? ''
+    const stage = url.searchParams.get('stage') as DealStage | null
+    const ownerId = url.searchParams.get('ownerId')
+    const sortBy = url.searchParams.get('sortBy') ?? 'createdAt'
+    const sortOrder = url.searchParams.get('sortOrder') === 'asc' ? 'asc' : 'desc'
+    const view = url.searchParams.get('view')
+
+    const filtered = filterAndSortDeals({
+      search,
+      stage,
+      ownerId,
+      sortBy,
+      sortOrder,
+    })
+
+    return HttpResponse.json(paginateDeals(filtered, page, limit, view))
+  }),
+
+  http.post('/api/deals', async ({ request }) => {
+    await delay(400)
+
+    const body = (await request.json()) as CreateDealInput
+    const created = createDealFromBody(body)
+    setDeals([created, ...deals])
+    return HttpResponse.json(enrichDeal(created), { status: 201 })
+  }),
+
+  http.patch('/api/deals/:id', async ({ params, request }) => {
+    await delay(350)
+
+    const body = (await request.json()) as UpdateDealInput
+    const updated = updateDealAt(String(params.id), body)
+
+    if (!updated) {
+      return HttpResponse.json({ message: 'Deal not found' }, { status: 404 })
+    }
+
+    return HttpResponse.json(enrichDeal(updated))
   }),
 
   http.get('/api/customers', async ({ request }) => {
