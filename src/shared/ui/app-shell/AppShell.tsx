@@ -29,7 +29,7 @@ export function ShellSidebar({ children, className }: ShellSlotProps) {
   return (
     <aside
       className={cn(
-        'flex w-60 shrink-0 flex-col border-r border-border bg-surface',
+        'flex w-16 shrink-0 flex-col border-r border-border bg-surface md:w-60',
         className,
       )}
     >

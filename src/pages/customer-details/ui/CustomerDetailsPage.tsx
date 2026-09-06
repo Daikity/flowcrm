@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import { CustomerAvatar, CustomerStatusBadge } from '@/entities/customer'
 import type { DealStage } from '@/entities/deal'
 import { useGetCustomerQuery, useGetUsersQuery } from '@/shared/api'
-import { formatCurrency, formatDate } from '@/shared/lib'
+import { formatCurrency, formatDate, isNotFoundError } from '@/shared/lib'
 import {
   Badge,
   Button,
@@ -35,13 +35,29 @@ const stageVariant: Record<
 
 export function CustomerDetailsPage() {
   const { id = '' } = useParams()
-  const { data, isLoading, isError, refetch } = useGetCustomerQuery(id, {
+  const { data, isLoading, isError, error, refetch } = useGetCustomerQuery(id, {
     skip: !id,
   })
   const { data: users = [] } = useGetUsersQuery()
 
   if (isLoading) {
     return <CustomerDetailsSkeleton />
+  }
+
+  if (isNotFoundError(error) || (!isLoading && !isError && !data)) {
+    return (
+      <EmptyState
+        title="Customer not found"
+        description="This customer does not exist or was deleted."
+        action={
+          <Link to="/customers">
+            <Button type="button" variant="secondary">
+              Back to customers
+            </Button>
+          </Link>
+        }
+      />
+    )
   }
 
   if (isError || !data) {

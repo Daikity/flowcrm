@@ -67,7 +67,7 @@ export function UiFoundationPage() {
           <Typography variant="small" muted>
             UI Foundation preview
           </Typography>
-          <Avatar name="Igor Edis" />
+          <Avatar name="Igor Edison" />
         </ShellHeader>
       }
     >

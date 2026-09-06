@@ -1,6 +1,6 @@
 import { matchPath, useLocation } from 'react-router-dom'
-import { LogoutButton } from '@/features/auth'
-import { currentUser, routeTitles } from '@/shared/config'
+import { getSessionUser, LogoutButton } from '@/features/auth'
+import { routeTitles } from '@/shared/config'
 import { Avatar, Button, ShellHeader, Typography } from '@/shared/ui'
 
 function resolvePageTitle(pathname: string) {
@@ -38,6 +38,7 @@ function BellIcon() {
 export function Header() {
   const { pathname } = useLocation()
   const title = resolvePageTitle(pathname)
+  const user = getSessionUser()
 
   return (
     <ShellHeader className="justify-between gap-4">
@@ -52,7 +53,7 @@ export function Header() {
         >
           <BellIcon />
         </Button>
-        <Avatar name={currentUser.name} size="sm" />
+        {user ? <Avatar name={user.name} size="sm" /> : null}
         <LogoutButton />
       </div>
     </ShellHeader>

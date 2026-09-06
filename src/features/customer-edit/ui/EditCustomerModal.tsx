@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { CustomerForm, type Customer, type CustomerFormValues } from '@/entities/customer'
 import type { User } from '@/entities/user'
 import { useUpdateCustomerMutation } from '@/shared/api'
-import { Modal } from '@/shared/ui'
+import { getApiErrorMessage } from '@/shared/lib'
+import { Modal, Typography } from '@/shared/ui'
 
 interface EditCustomerModalProps {
   customer: Customer | null
@@ -16,6 +18,7 @@ export function EditCustomerModal({
   open,
   onClose,
 }: EditCustomerModalProps) {
+  const [formError, setFormError] = useState('')
   const [updateCustomer, { isLoading }] = useUpdateCustomerMutation()
 
   if (!customer) {
@@ -24,29 +27,46 @@ export function EditCustomerModal({
 
   async function handleSubmit(values: CustomerFormValues) {
     if (!customer) return
-    await updateCustomer({ id: customer.id, data: values }).unwrap()
+    setFormError('')
+    try {
+      await updateCustomer({ id: customer.id, data: values }).unwrap()
+      onClose()
+    } catch (error) {
+      setFormError(getApiErrorMessage(error, 'Failed to update customer.'))
+    }
+  }
+
+  function handleClose() {
+    setFormError('')
     onClose()
   }
 
   return (
-    <Modal open={open} onClose={onClose} title="Edit Customer">
-      <CustomerForm
-        key={customer.id}
-        users={users}
-        defaultValues={{
-          name: customer.name,
-          company: customer.company,
-          email: customer.email,
-          phone: customer.phone,
-          industry: customer.industry,
-          status: customer.status,
-          ownerId: customer.ownerId,
-        }}
-        submitLabel="Save changes"
-        isSubmitting={isLoading}
-        onSubmit={handleSubmit}
-        onCancel={onClose}
-      />
+    <Modal open={open} onClose={handleClose} title="Edit Customer">
+      <div className="space-y-3">
+        {formError ? (
+          <Typography variant="small" className="text-danger">
+            {formError}
+          </Typography>
+        ) : null}
+        <CustomerForm
+          key={customer.id}
+          users={users}
+          defaultValues={{
+            name: customer.name,
+            company: customer.company,
+            email: customer.email,
+            phone: customer.phone,
+            industry: customer.industry,
+            status: customer.status,
+            ownerId: customer.ownerId,
+          }}
+          submitLabel="Save changes"
+          isSubmitting={isLoading}
+          onSubmit={handleSubmit}
+          onCancel={handleClose}
+        />
+      </div>
     </Modal>
   )
 }

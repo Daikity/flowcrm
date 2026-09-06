@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   CustomerAvatar,
@@ -40,27 +39,8 @@ export function CustomerTable({
   onDelete,
 }: CustomerTableProps) {
   const navigate = useNavigate()
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
 
   const usersById = Object.fromEntries(users.map((user) => [user.id, user]))
-  const allSelected =
-    customers.length > 0 && customers.every((customer) => selectedIds.includes(customer.id))
-
-  function toggleAll() {
-    if (allSelected) {
-      setSelectedIds([])
-      return
-    }
-    setSelectedIds(customers.map((customer) => customer.id))
-  }
-
-  function toggleOne(id: string) {
-    setSelectedIds((current) =>
-      current.includes(id)
-        ? current.filter((item) => item !== id)
-        : [...current, id],
-    )
-  }
 
   function sortLabel(column: string) {
     if (sortBy !== column) return ''
@@ -73,14 +53,6 @@ export function CustomerTable({
         <Table>
           <THead>
             <TR>
-              <TH className="w-10">
-                <input
-                  type="checkbox"
-                  checked={allSelected}
-                  onChange={toggleAll}
-                  aria-label="Select all customers"
-                />
-              </TH>
               <TH>
                 <button type="button" onClick={() => onSort('name')}>
                   Customer{sortLabel('name')}
@@ -113,14 +85,6 @@ export function CustomerTable({
 
               return (
                 <TR key={customer.id} className="hover:bg-surface-secondary/60">
-                  <TD>
-                    <input
-                      type="checkbox"
-                      checked={selectedIds.includes(customer.id)}
-                      onChange={() => toggleOne(customer.id)}
-                      aria-label={`Select ${customer.name}`}
-                    />
-                  </TD>
                   <TD>
                     <div className="flex items-center gap-3">
                       <CustomerAvatar name={customer.name} />

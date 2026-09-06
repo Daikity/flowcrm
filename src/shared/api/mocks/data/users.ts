@@ -3,7 +3,7 @@ import type { User } from '@/entities/user'
 export const users: User[] = [
   {
     id: 'user-1',
-    name: 'Igor Edis',
+    name: 'Igor Edison',
     email: 'igor@flowcrm.app',
     role: 'admin',
   },

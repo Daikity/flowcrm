@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Input, Typography } from '@/shared/ui'
 import {
   saveAuth,
@@ -8,9 +8,18 @@ import {
 
 export function LoginForm() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [login, setLogin] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+
+  const from =
+    typeof location.state === 'object' &&
+    location.state !== null &&
+    'from' in location.state &&
+    typeof (location.state as { from: unknown }).from === 'string'
+      ? (location.state as { from: string }).from
+      : '/dashboard'
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -20,8 +29,8 @@ export function LoginForm() {
       return
     }
 
-    saveAuth(login.trim(), password)
-    navigate('/dashboard', { replace: true })
+    saveAuth()
+    navigate(from || '/dashboard', { replace: true })
   }
 
   return (
