@@ -53,6 +53,16 @@ UI → RTK Query → /api/* → MSW → mock data → cache → UI
 - loading / error / empty, responsive
 - RTK Query cache invalidation + MSW с мутацией mock dataset
 
+### 4. Tasks
+
+- list: `GET /api/tasks`, create: `POST`, update: `PATCH`
+- search; фильтры status / priority / assignee / due date; сортировка; pagination
+- UI: секции Overdue / Today / Upcoming / Completed (не таблица)
+- создание и редактирование, смена status, priority badges, overdue state
+- привязка к customer / deal
+- URL query params, loading / error / empty, responsive
+- RTK Query cache invalidation + MSW stateful + тесты handlers
+
 ## Команды
 
 ```bash
@@ -65,4 +75,4 @@ npm run test:run
 
 Демо-вход: `admin` / `admin`
 
-После входа: `/dashboard`, `/customers`, `/deals`.
+После входа: `/dashboard`, `/customers`, `/deals`, `/tasks`.

@@ -14,4 +14,10 @@ export {
   useGetDealsQuery,
   useUpdateDealMutation,
 } from './dealsApi'
+export {
+  tasksApi,
+  useCreateTaskMutation,
+  useGetTasksQuery,
+  useUpdateTaskMutation,
+} from './tasksApi'
 export { usersApi, useGetUsersQuery } from './usersApi'

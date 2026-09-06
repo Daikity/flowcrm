@@ -13,10 +13,18 @@ import type {
   DealStage,
   UpdateDealInput,
 } from '@/entities/deal'
+import type {
+  CreateTaskInput,
+  TaskDueFilter,
+  TaskPriority,
+  TaskStatus,
+  UpdateTaskInput,
+} from '@/entities/task'
 import { activities } from './data/activities'
 import { customers, setCustomers } from './data/customers'
 import { dashboardData } from './data/dashboard'
 import { deals, setDeals } from './data/deals'
+import { setTasks, tasks } from './data/tasks'
 import { users } from './data/users'
 import {
   createDealFromBody,
@@ -25,6 +33,13 @@ import {
   paginateDeals,
   updateDealAt,
 } from './deals.logic'
+import {
+  createTaskFromBody,
+  enrichTask,
+  filterAndSortTasks,
+  paginateTasks,
+  updateTaskAt,
+} from './tasks.logic'
 
 const OPEN_STAGES = new Set(['lead', 'qualified', 'proposal', 'negotiation'])
 
@@ -83,6 +98,55 @@ export const handlers = [
     }
 
     return HttpResponse.json(enrichDeal(updated))
+  }),
+
+  http.get('/api/tasks', async ({ request }) => {
+    await delay(350)
+
+    const url = new URL(request.url)
+    const page = Math.max(1, Number(url.searchParams.get('page') ?? '1') || 1)
+    const limit = Math.max(1, Number(url.searchParams.get('limit') ?? '10') || 10)
+    const search = url.searchParams.get('search')?.trim().toLowerCase() ?? ''
+    const status = url.searchParams.get('status') as TaskStatus | null
+    const priority = url.searchParams.get('priority') as TaskPriority | null
+    const assigneeId = url.searchParams.get('assigneeId')
+    const due = url.searchParams.get('due') as TaskDueFilter | null
+    const sortBy = url.searchParams.get('sortBy') ?? 'dueDate'
+    const sortOrder = url.searchParams.get('sortOrder') === 'desc' ? 'desc' : 'asc'
+
+    const filtered = filterAndSortTasks({
+      search,
+      status,
+      priority,
+      assigneeId,
+      due,
+      sortBy,
+      sortOrder,
+    })
+
+    return HttpResponse.json(paginateTasks(filtered, page, limit))
+  }),
+
+  http.post('/api/tasks', async ({ request }) => {
+    await delay(400)
+
+    const body = (await request.json()) as CreateTaskInput
+    const created = createTaskFromBody(body)
+    setTasks([created, ...tasks])
+    return HttpResponse.json(enrichTask(created), { status: 201 })
+  }),
+
+  http.patch('/api/tasks/:id', async ({ params, request }) => {
+    await delay(350)
+
+    const body = (await request.json()) as UpdateTaskInput
+    const updated = updateTaskAt(String(params.id), body)
+
+    if (!updated) {
+      return HttpResponse.json({ message: 'Task not found' }, { status: 404 })
+    }
+
+    return HttpResponse.json(enrichTask(updated))
   }),
 
   http.get('/api/customers', async ({ request }) => {
