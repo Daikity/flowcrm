@@ -6,15 +6,26 @@ export interface DropdownItem {
   id: string
   label: string
   onSelect: () => void
+  danger?: boolean
 }
 
 export interface DropdownProps {
   triggerLabel: string
   items: DropdownItem[]
   className?: string
+  align?: 'start' | 'end'
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger'
+  size?: 'sm' | 'md' | 'lg'
 }
 
-export function Dropdown({ triggerLabel, items, className }: DropdownProps) {
+export function Dropdown({
+  triggerLabel,
+  items,
+  className,
+  align = 'start',
+  variant = 'secondary',
+  size = 'md',
+}: DropdownProps) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const menuId = useId()
@@ -33,7 +44,8 @@ export function Dropdown({ triggerLabel, items, className }: DropdownProps) {
   return (
     <div ref={rootRef} className={cn('relative inline-block', className)}>
       <Button
-        variant="secondary"
+        variant={variant}
+        size={size}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={menuId}
@@ -45,14 +57,20 @@ export function Dropdown({ triggerLabel, items, className }: DropdownProps) {
         <div
           id={menuId}
           role="menu"
-          className="absolute top-full left-0 z-20 mt-2 min-w-44 overflow-hidden rounded-md border border-border bg-surface shadow-[var(--shadow-overlay)]"
+          className={cn(
+            'absolute top-full z-20 mt-2 min-w-44 overflow-hidden rounded-md border border-border bg-surface shadow-[var(--shadow-overlay)]',
+            align === 'end' ? 'right-0' : 'left-0',
+          )}
         >
           {items.map((item) => (
             <button
               key={item.id}
               type="button"
               role="menuitem"
-              className="block w-full px-3 py-2 text-left text-small text-text-primary hover:bg-surface-secondary"
+              className={cn(
+                'block w-full px-3 py-2 text-left text-small hover:bg-surface-secondary',
+                item.danger ? 'text-danger' : 'text-text-primary',
+              )}
               onClick={() => {
                 item.onSelect()
                 setOpen(false)
