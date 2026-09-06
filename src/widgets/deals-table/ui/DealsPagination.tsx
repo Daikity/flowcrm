@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui'
 
 interface DealsPaginationProps {
@@ -13,10 +14,12 @@ export function DealsPagination({
   total,
   onPageChange,
 }: DealsPaginationProps) {
+  const { t } = useTranslation()
+
   if (totalPages <= 1) {
     return (
       <p className="text-small text-text-secondary">
-        {total} deal{total === 1 ? '' : 's'}
+        {t('deals.pagination.count', { count: total })}
       </p>
     )
   }
@@ -29,7 +32,11 @@ export function DealsPagination({
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
       <p className="text-small text-text-secondary">
-        Page {page} of {totalPages} · {total} total
+        {t('common.pagination.pageOf', {
+          page,
+          totalPages,
+          total,
+        })}
       </p>
       <div className="flex items-center gap-1">
         <Button
@@ -39,7 +46,7 @@ export function DealsPagination({
           disabled={page <= 1}
           onClick={() => onPageChange(page - 1)}
         >
-          Prev
+          {t('common.pagination.prev')}
         </Button>
         {pages.map((item) => (
           <Button
@@ -59,7 +66,7 @@ export function DealsPagination({
           disabled={page >= totalPages}
           onClick={() => onPageChange(page + 1)}
         >
-          Next
+          {t('common.pagination.next')}
         </Button>
       </div>
     </div>

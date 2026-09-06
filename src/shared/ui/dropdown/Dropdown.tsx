@@ -16,6 +16,7 @@ export interface DropdownProps {
   align?: 'start' | 'end'
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger'
   size?: 'sm' | 'md' | 'lg'
+  ariaLabel?: string
 }
 
 export function Dropdown({
@@ -25,6 +26,7 @@ export function Dropdown({
   align = 'start',
   variant = 'secondary',
   size = 'md',
+  ariaLabel,
 }: DropdownProps) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
@@ -46,6 +48,7 @@ export function Dropdown({
       <Button
         variant={variant}
         size={size}
+        aria-label={ariaLabel}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={menuId}

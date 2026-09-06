@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next'
 import { Badge } from '@/shared/ui'
-import { DEAL_STAGE_LABEL, DEAL_STAGE_VARIANT } from '../model/constants'
+import { DEAL_STAGE_VARIANT } from '../model/constants'
 import type { DealStage } from '../model/types'
 
 interface DealStageBadgeProps {
@@ -7,7 +8,11 @@ interface DealStageBadgeProps {
 }
 
 export function DealStageBadge({ stage }: DealStageBadgeProps) {
+  const { t } = useTranslation()
+
   return (
-    <Badge variant={DEAL_STAGE_VARIANT[stage]}>{DEAL_STAGE_LABEL[stage]}</Badge>
+    <Badge variant={DEAL_STAGE_VARIANT[stage]}>
+      {t(`enums.dealStage.${stage}`)}
+    </Badge>
   )
 }

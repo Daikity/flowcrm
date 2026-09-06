@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { Activity, ActivityType } from '@/entities/activity'
 import { formatDate } from '@/shared/lib'
 import {
@@ -13,14 +14,6 @@ interface RecentActivityProps {
   activities: Activity[]
 }
 
-const typeLabel: Record<ActivityType, string> = {
-  customer_created: 'Customer',
-  deal_created: 'Deal',
-  deal_won: 'Won',
-  task_completed: 'Task',
-  note_updated: 'Note',
-}
-
 const typeVariant: Record<
   ActivityType,
   'neutral' | 'primary' | 'success' | 'warning'
@@ -33,22 +26,24 @@ const typeVariant: Record<
 }
 
 export function RecentActivity({ activities }: RecentActivityProps) {
+  const { t, i18n } = useTranslation()
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recent activity</CardTitle>
-        <CardDescription>Свежие события по CRM</CardDescription>
+        <CardTitle>{t('dashboard.activity.title')}</CardTitle>
+        <CardDescription>{t('dashboard.activity.description')}</CardDescription>
       </CardHeader>
       <ul className="space-y-4">
         {activities.map((activity) => (
           <li key={activity.id} className="flex items-start gap-3">
             <Badge variant={typeVariant[activity.type]} className="mt-0.5 shrink-0">
-              {typeLabel[activity.type]}
+              {t(`enums.activityType.${activity.type}`)}
             </Badge>
             <div className="min-w-0 space-y-1">
               <Typography variant="small">{activity.message}</Typography>
               <Typography variant="caption" muted className="normal-case tracking-normal">
-                {formatDate(activity.createdAt)}
+                {formatDate(activity.createdAt, i18n.language)}
               </Typography>
             </div>
           </li>

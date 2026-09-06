@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import {
   CustomerAvatar,
   CustomerStatusBadge,
@@ -38,6 +39,7 @@ export function CustomerTable({
   onEdit,
   onDelete,
 }: CustomerTableProps) {
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
 
   const usersById = Object.fromEntries(users.map((user) => [user.id, user]))
@@ -45,6 +47,27 @@ export function CustomerTable({
   function sortLabel(column: string) {
     if (sortBy !== column) return ''
     return sortOrder === 'asc' ? ' ↑' : ' ↓'
+  }
+
+  function actionItems(customer: Customer) {
+    return [
+      {
+        id: 'view',
+        label: t('common.actions.view'),
+        onSelect: () => navigate(`/customers/${customer.id}`),
+      },
+      {
+        id: 'edit',
+        label: t('common.actions.edit'),
+        onSelect: () => onEdit(customer),
+      },
+      {
+        id: 'delete',
+        label: t('common.actions.delete'),
+        danger: true,
+        onSelect: () => onDelete(customer),
+      },
+    ]
   }
 
   return (
@@ -55,28 +78,32 @@ export function CustomerTable({
             <TR>
               <TH>
                 <button type="button" onClick={() => onSort('name')}>
-                  Customer{sortLabel('name')}
+                  {t('customers.table.columns.customer')}
+                  {sortLabel('name')}
                 </button>
               </TH>
               <TH>
                 <button type="button" onClick={() => onSort('company')}>
-                  Company{sortLabel('company')}
+                  {t('customers.table.columns.company')}
+                  {sortLabel('company')}
                 </button>
               </TH>
-              <TH>Status</TH>
-              <TH>Industry</TH>
+              <TH>{t('customers.table.columns.status')}</TH>
+              <TH>{t('customers.table.columns.industry')}</TH>
               <TH>
                 <button type="button" onClick={() => onSort('revenue')}>
-                  Revenue{sortLabel('revenue')}
+                  {t('customers.table.columns.revenue')}
+                  {sortLabel('revenue')}
                 </button>
               </TH>
-              <TH>Owner</TH>
+              <TH>{t('customers.table.columns.owner')}</TH>
               <TH>
                 <button type="button" onClick={() => onSort('createdAt')}>
-                  Created{sortLabel('createdAt')}
+                  {t('customers.table.columns.created')}
+                  {sortLabel('createdAt')}
                 </button>
               </TH>
-              <TH className="w-16">Actions</TH>
+              <TH className="w-16">{t('customers.table.columns.actions')}</TH>
             </TR>
           </THead>
           <TBody>
@@ -100,7 +127,7 @@ export function CustomerTable({
                   <TD>
                     <CustomerStatusBadge status={customer.status} />
                   </TD>
-                  <TD>{customer.industry}</TD>
+                  <TD>{t(`enums.industry.${customer.industry}`)}</TD>
                   <TD>{formatCurrency(customer.revenue)}</TD>
                   <TD>
                     {owner ? (
@@ -112,31 +139,14 @@ export function CustomerTable({
                       '—'
                     )}
                   </TD>
-                  <TD>{formatDate(customer.createdAt)}</TD>
+                  <TD>{formatDate(customer.createdAt, i18n.language)}</TD>
                   <TD>
                     <Dropdown
                       triggerLabel="⋮"
                       variant="ghost"
                       size="sm"
                       align="end"
-                      items={[
-                        {
-                          id: 'view',
-                          label: 'View',
-                          onSelect: () => navigate(`/customers/${customer.id}`),
-                        },
-                        {
-                          id: 'edit',
-                          label: 'Edit',
-                          onSelect: () => onEdit(customer),
-                        },
-                        {
-                          id: 'delete',
-                          label: 'Delete',
-                          danger: true,
-                          onSelect: () => onDelete(customer),
-                        },
-                      ]}
+                      items={actionItems(customer)}
                     />
                   </TD>
                 </TR>
@@ -167,31 +177,14 @@ export function CustomerTable({
                   variant="ghost"
                   size="sm"
                   align="end"
-                  items={[
-                    {
-                      id: 'view',
-                      label: 'View',
-                      onSelect: () => navigate(`/customers/${customer.id}`),
-                    },
-                    {
-                      id: 'edit',
-                      label: 'Edit',
-                      onSelect: () => onEdit(customer),
-                    },
-                    {
-                      id: 'delete',
-                      label: 'Delete',
-                      danger: true,
-                      onSelect: () => onDelete(customer),
-                    },
-                  ]}
+                  items={actionItems(customer)}
                 />
               </div>
 
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 <CustomerStatusBadge status={customer.status} />
                 <span className="text-small text-text-secondary">
-                  {customer.industry}
+                  {t(`enums.industry.${customer.industry}`)}
                 </span>
               </div>
 

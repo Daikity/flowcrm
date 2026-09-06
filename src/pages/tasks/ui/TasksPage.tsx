@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 import type {
   TaskDueFilter,
@@ -66,6 +67,7 @@ function parseParams(searchParams: URLSearchParams): TasksParams & {
 }
 
 export function TasksPage() {
+  const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
   const parsed = useMemo(() => parseParams(searchParams), [searchParams])
   const [searchInput, setSearchInput] = useState(parsed.searchInput)
@@ -182,10 +184,8 @@ export function TasksPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <Typography variant="h1">Tasks</Typography>
-          <Typography muted>
-            Track work linked to customers and deals
-          </Typography>
+          <Typography variant="h1">{t('tasks.title')}</Typography>
+          <Typography muted>{t('tasks.subtitle')}</Typography>
         </div>
         <CreateTaskButton
           users={users}

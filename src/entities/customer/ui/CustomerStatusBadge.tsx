@@ -1,11 +1,6 @@
+import { useTranslation } from 'react-i18next'
 import type { CustomerStatus } from '../model/types'
 import { Badge } from '@/shared/ui'
-
-const statusLabel: Record<CustomerStatus, string> = {
-  active: 'Active',
-  inactive: 'Inactive',
-  lead: 'Lead',
-}
 
 const statusVariant: Record<
   CustomerStatus,
@@ -21,5 +16,11 @@ interface CustomerStatusBadgeProps {
 }
 
 export function CustomerStatusBadge({ status }: CustomerStatusBadgeProps) {
-  return <Badge variant={statusVariant[status]}>{statusLabel[status]}</Badge>
+  const { t } = useTranslation()
+
+  return (
+    <Badge variant={statusVariant[status]}>
+      {t(`enums.customerStatus.${status}`)}
+    </Badge>
+  )
 }

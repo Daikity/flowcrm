@@ -11,7 +11,7 @@ export type {
   UpdateDealInput,
 } from './model/types'
 export type { DealFormValues } from './model/schema'
-export { dealFormSchema } from './model/schema'
+export { createDealSchema } from './model/schema'
 export {
   DEAL_STAGE_LABEL,
   DEAL_STAGE_PROBABILITY,

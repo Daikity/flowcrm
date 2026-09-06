@@ -85,17 +85,17 @@ export function getMonthGrid(viewDate: Date, today = new Date()): CalendarDay[] 
   return days
 }
 
-export function formatMonthYear(date: Date): string {
-  return new Intl.DateTimeFormat('en-GB', {
+export function formatMonthYear(date: Date, locale = 'en-GB'): string {
+  return new Intl.DateTimeFormat(locale, {
     month: 'long',
     year: 'numeric',
   }).format(date)
 }
 
-export function formatDisplayDate(iso: string): string {
+export function formatDisplayDate(iso: string, locale = 'en-GB'): string {
   const date = parseIsoDate(iso)
   if (!date) return iso
-  return new Intl.DateTimeFormat('en-GB', {
+  return new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     year: 'numeric',

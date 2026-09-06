@@ -7,6 +7,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import { useTranslation } from 'react-i18next'
 import type { RevenuePoint } from '@/entities/dashboard'
 import { formatCurrency } from '@/shared/lib'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui'
@@ -16,11 +17,13 @@ interface RevenueChartProps {
 }
 
 export function RevenueChart({ data }: RevenueChartProps) {
+  const { t } = useTranslation()
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Revenue</CardTitle>
-        <CardDescription>Динамика выручки за последние месяцы</CardDescription>
+        <CardTitle>{t('dashboard.revenue.title')}</CardTitle>
+        <CardDescription>{t('dashboard.revenue.description')}</CardDescription>
       </CardHeader>
       <div className="h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">

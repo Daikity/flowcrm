@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { ReportOwnerBreakdown } from '@/entities/report'
 import { formatCurrency } from '@/shared/lib'
 import {
@@ -19,26 +20,28 @@ interface ReportsOwnerTableProps {
 }
 
 export function ReportsOwnerTable({ data }: ReportsOwnerTableProps) {
+  const { t } = useTranslation()
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>By Owner</CardTitle>
-        <CardDescription>Выручка и сделки по владельцам</CardDescription>
+        <CardTitle>{t('reports.byOwner.title')}</CardTitle>
+        <CardDescription>{t('reports.byOwner.description')}</CardDescription>
       </CardHeader>
 
       {data.length === 0 ? (
         <Typography muted className="py-8 text-center">
-          Нет данных по владельцам
+          {t('reports.byOwner.empty')}
         </Typography>
       ) : (
         <div className="overflow-x-auto">
           <Table>
             <THead>
               <TR>
-                <TH>Owner</TH>
-                <TH>Deals</TH>
-                <TH>Won</TH>
-                <TH>Revenue</TH>
+                <TH>{t('reports.byOwner.columns.owner')}</TH>
+                <TH>{t('reports.byOwner.columns.deals')}</TH>
+                <TH>{t('reports.byOwner.columns.won')}</TH>
+                <TH>{t('reports.byOwner.columns.revenue')}</TH>
               </TR>
             </THead>
             <TBody>

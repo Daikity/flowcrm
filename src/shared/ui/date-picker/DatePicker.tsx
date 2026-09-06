@@ -1,4 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { LOCALE_TO_INTL, type AppLocale } from '@/shared/config'
 import { formatDisplayDate, toIsoDate } from '@/shared/lib/date'
 import { cn } from '@/shared/lib'
 import { Calendar } from '@/shared/ui/calendar'
@@ -23,7 +25,7 @@ export function DatePicker({
   value = '',
   onChange,
   label,
-  placeholder = 'Select date',
+  placeholder,
   error,
   min,
   max,
@@ -33,11 +35,15 @@ export function DatePicker({
   name,
   id,
 }: DatePickerProps) {
+  const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const reactId = useId()
   const pickerId = id ?? `datepicker-${reactId}`
   const popoverId = `${pickerId}-popover`
+  const resolvedPlaceholder = placeholder ?? t('common.datePicker.placeholder')
+  const intlLocale =
+    LOCALE_TO_INTL[i18n.language as AppLocale] ?? LOCALE_TO_INTL.en
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
@@ -60,7 +66,9 @@ export function DatePicker({
     }
   }, [])
 
-  const display = value ? formatDisplayDate(value) : placeholder
+  const display = value
+    ? formatDisplayDate(value, intlLocale)
+    : resolvedPlaceholder
 
   return (
     <div
@@ -111,7 +119,7 @@ export function DatePicker({
         <div
           id={popoverId}
           role="dialog"
-          aria-label={label ?? 'Choose date'}
+          aria-label={label ?? t('common.datePicker.aria')}
           className="absolute top-full left-0 z-40 mt-2 overflow-hidden rounded-md border border-border bg-surface shadow-[var(--shadow-overlay)]"
         >
           <Calendar
@@ -133,7 +141,7 @@ export function DatePicker({
                 setOpen(false)
               }}
             >
-              Today
+              {t('common.datePicker.today')}
             </Button>
             {clearable ? (
               <Button
@@ -146,7 +154,7 @@ export function DatePicker({
                   setOpen(false)
                 }}
               >
-                Clear
+                {t('common.datePicker.clear')}
               </Button>
             ) : null}
           </div>

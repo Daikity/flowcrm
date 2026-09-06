@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Button, EmptyState } from '@/shared/ui'
 
 interface ReportsErrorProps {
@@ -5,13 +6,15 @@ interface ReportsErrorProps {
 }
 
 export function ReportsError({ onRetry }: ReportsErrorProps) {
+  const { t } = useTranslation()
+
   return (
     <EmptyState
-      title="Не удалось загрузить reports"
-      description="Проверьте соединение или попробуйте ещё раз."
+      title={t('reports.error.title')}
+      description={t('reports.error.description')}
       action={
         <Button type="button" onClick={onRetry}>
-          Повторить
+          {t('common.retry')}
         </Button>
       }
     />

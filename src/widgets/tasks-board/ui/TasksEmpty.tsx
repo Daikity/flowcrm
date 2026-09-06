@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { EmptyState } from '@/shared/ui'
 
 interface TasksEmptyProps {
@@ -7,13 +8,13 @@ interface TasksEmptyProps {
 }
 
 export function TasksEmpty({ hasFilters, action }: TasksEmptyProps) {
+  const { t } = useTranslation()
+
   return (
     <EmptyState
-      title="No tasks found."
+      title={t('tasks.empty.title')}
       description={
-        hasFilters
-          ? 'Try changing your filters or create a new task.'
-          : 'Create your first task to get started.'
+        hasFilters ? t('tasks.empty.filtered') : t('tasks.empty.default')
       }
       action={action}
     />

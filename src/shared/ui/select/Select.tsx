@@ -5,6 +5,7 @@ import {
   useState,
   type KeyboardEvent,
 } from 'react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 
 export interface SelectOption {
@@ -54,13 +55,15 @@ export function Select({
   defaultValue = '',
   onChange,
   label,
-  placeholder = 'Выберите',
+  placeholder,
   error,
   name,
   id,
   disabled = false,
   className,
 }: SelectProps) {
+  const { t } = useTranslation()
+  const resolvedPlaceholder = placeholder ?? t('common.select.placeholder')
   const isControlled = value !== undefined
   const [internalValue, setInternalValue] = useState(defaultValue)
   const selectedValue = isControlled ? value : internalValue
@@ -75,7 +78,7 @@ export function Select({
   const listboxId = `${selectId}-listbox`
 
   const selectedOption = options.find((option) => option.value === selectedValue)
-  const displayLabel = selectedOption?.label ?? placeholder
+  const displayLabel = selectedOption?.label ?? resolvedPlaceholder
   const isPlaceholder = !selectedOption
 
   function getSelectedIndex() {

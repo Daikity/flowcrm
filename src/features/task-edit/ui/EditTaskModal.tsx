@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { Customer } from '@/entities/customer'
 import type { DealListItem } from '@/entities/deal'
 import {
@@ -41,6 +42,7 @@ export function EditTaskModal({
   open,
   onClose,
 }: EditTaskModalProps) {
+  const { t } = useTranslation()
   const [formError, setFormError] = useState('')
   const [updateTask, { isLoading }] = useUpdateTaskMutation()
 
@@ -55,7 +57,7 @@ export function EditTaskModal({
       await updateTask({ id: task.id, data: toUpdatePayload(values) }).unwrap()
       onClose()
     } catch (error) {
-      setFormError(getApiErrorMessage(error, 'Failed to update task.'))
+      setFormError(getApiErrorMessage(error, t('tasks.edit.error')))
     }
   }
 
@@ -65,7 +67,7 @@ export function EditTaskModal({
   }
 
   return (
-    <Modal open={open} onClose={handleClose} title="Edit Task">
+    <Modal open={open} onClose={handleClose} title={t('tasks.edit.modalTitle')}>
       <div className="space-y-3">
         {formError ? (
           <Typography variant="small" className="text-danger">
@@ -87,7 +89,7 @@ export function EditTaskModal({
             customerId: task.customerId ?? '',
             dealId: task.dealId ?? '',
           }}
-          submitLabel="Save changes"
+          submitLabel={t('common.actions.saveChanges')}
           isSubmitting={isLoading}
           onSubmit={handleSubmit}
           onCancel={handleClose}

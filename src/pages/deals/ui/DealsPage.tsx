@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 import type {
   DealListItem,
@@ -52,6 +53,7 @@ function parseParams(searchParams: URLSearchParams): DealsParams & {
 }
 
 export function DealsPage() {
+  const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
   const parsed = useMemo(() => parseParams(searchParams), [searchParams])
   const [searchInput, setSearchInput] = useState(parsed.searchInput)
@@ -175,8 +177,8 @@ export function DealsPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <Typography variant="h1">Deals</Typography>
-          <Typography muted>Pipeline table and kanban board</Typography>
+          <Typography variant="h1">{t('deals.title')}</Typography>
+          <Typography muted>{t('deals.subtitle')}</Typography>
         </div>
         <CreateDealButton users={users} customers={customers} />
       </div>
@@ -198,7 +200,7 @@ export function DealsPage() {
           <div
             className="inline-flex rounded-md border border-border p-0.5"
             role="group"
-            aria-label="Deals view"
+            aria-label={t('deals.view.aria')}
           >
             <Button
               type="button"
@@ -206,7 +208,7 @@ export function DealsPage() {
               variant={isTable ? 'primary' : 'ghost'}
               onClick={() => setView('table')}
             >
-              Table
+              {t('deals.view.table')}
             </Button>
             <Button
               type="button"
@@ -214,7 +216,7 @@ export function DealsPage() {
               variant={!isTable ? 'primary' : 'ghost'}
               onClick={() => setView('kanban')}
             >
-              Kanban
+              {t('deals.view.kanban')}
             </Button>
           </div>
         </div>

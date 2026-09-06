@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { TaskListItem } from '@/entities/task'
 import type { User } from '@/entities/user'
 import { Typography } from '@/shared/ui'
@@ -12,13 +13,6 @@ const SECTION_ORDER: TaskSectionKey[] = [
   'upcoming',
   'completed',
 ]
-
-const SECTION_LABEL: Record<TaskSectionKey, string> = {
-  overdue: 'Overdue',
-  today: 'Today',
-  upcoming: 'Upcoming',
-  completed: 'Completed',
-}
 
 interface TasksBoardProps {
   tasks: TaskListItem[]
@@ -34,6 +28,7 @@ function sectionForTask(task: TaskListItem, today: string): TaskSectionKey {
 }
 
 export function TasksBoard({ tasks, users, onEdit }: TasksBoardProps) {
+  const { t } = useTranslation()
   const usersById = Object.fromEntries(users.map((user) => [user.id, user]))
   const today = new Date().toISOString().slice(0, 10)
 
@@ -52,7 +47,6 @@ export function TasksBoard({ tasks, users, onEdit }: TasksBoardProps) {
     return SECTION_ORDER.filter((key) => grouped[key].length > 0).map(
       (key) => ({
         key,
-        label: SECTION_LABEL[key],
         items: grouped[key],
       }),
     )
@@ -64,7 +58,7 @@ export function TasksBoard({ tasks, users, onEdit }: TasksBoardProps) {
         <section key={section.key} className="space-y-3">
           <div className="flex items-baseline gap-2">
             <Typography variant="h2" className="text-lg">
-              {section.label}
+              {t(`tasks.sections.${section.key}`)}
             </Typography>
             <span className="text-small text-text-secondary">
               {section.items.length}

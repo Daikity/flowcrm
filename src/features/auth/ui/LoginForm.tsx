@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Input, Typography } from '@/shared/ui'
 import {
@@ -7,6 +8,7 @@ import {
 } from '../model/authStorage'
 
 export function LoginForm() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
   const [login, setLogin] = useState('')
@@ -25,7 +27,7 @@ export function LoginForm() {
     event.preventDefault()
 
     if (!validateCredentials(login.trim(), password)) {
-      setError('Неверный логин или пароль')
+      setError(t('auth.login.invalidCredentials'))
       return
     }
 
@@ -36,7 +38,7 @@ export function LoginForm() {
   return (
     <form className="flex w-full max-w-sm flex-col gap-4" onSubmit={handleSubmit}>
       <Input
-        label="Логин"
+        label={t('auth.login.username')}
         name="login"
         autoComplete="username"
         value={login}
@@ -44,10 +46,10 @@ export function LoginForm() {
           setLogin(event.target.value)
           setError('')
         }}
-        placeholder="admin"
+        placeholder={t('auth.login.placeholder')}
       />
       <Input
-        label="Пароль"
+        label={t('auth.login.password')}
         name="password"
         type="password"
         autoComplete="current-password"
@@ -56,7 +58,7 @@ export function LoginForm() {
           setPassword(event.target.value)
           setError('')
         }}
-        placeholder="admin"
+        placeholder={t('auth.login.placeholder')}
       />
       {error ? (
         <Typography variant="small" className="text-danger">
@@ -64,7 +66,7 @@ export function LoginForm() {
         </Typography>
       ) : null}
       <Button type="submit" className="w-full">
-        Войти
+        {t('auth.login.submit')}
       </Button>
     </form>
   )

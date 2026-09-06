@@ -1,7 +1,7 @@
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   TASK_PRIORITIES,
-  TASK_PRIORITY_LABEL,
-  TASK_STATUS_LABEL,
   TASK_STATUSES,
   type TaskDueFilter,
   type TaskPriority,
@@ -22,30 +22,6 @@ interface TaskFiltersProps {
   onDueChange: (value: TaskDueFilter | '') => void
 }
 
-const statusOptions = [
-  { value: '', label: 'All statuses' },
-  ...TASK_STATUSES.map((status) => ({
-    value: status,
-    label: TASK_STATUS_LABEL[status],
-  })),
-]
-
-const priorityOptions = [
-  { value: '', label: 'All priorities' },
-  ...TASK_PRIORITIES.map((priority) => ({
-    value: priority,
-    label: TASK_PRIORITY_LABEL[priority],
-  })),
-]
-
-const dueOptions: { value: TaskDueFilter | ''; label: string }[] = [
-  { value: '', label: 'Any due date' },
-  { value: 'overdue', label: 'Overdue' },
-  { value: 'today', label: 'Due today' },
-  { value: 'week', label: 'This week' },
-  { value: 'upcoming', label: 'Upcoming' },
-]
-
 export function TaskFilters({
   status = '',
   priority = '',
@@ -57,10 +33,48 @@ export function TaskFilters({
   onAssigneeChange,
   onDueChange,
 }: TaskFiltersProps) {
-  const assigneeOptions = [
-    { value: '', label: 'All assignees' },
-    ...users.map((user) => ({ value: user.id, label: user.name })),
-  ]
+  const { t } = useTranslation()
+
+  const statusOptions = useMemo(
+    () => [
+      { value: '', label: t('tasks.filters.allStatuses') },
+      ...TASK_STATUSES.map((item) => ({
+        value: item,
+        label: t(`enums.taskStatus.${item}`),
+      })),
+    ],
+    [t],
+  )
+
+  const priorityOptions = useMemo(
+    () => [
+      { value: '', label: t('tasks.filters.allPriorities') },
+      ...TASK_PRIORITIES.map((item) => ({
+        value: item,
+        label: t(`enums.taskPriority.${item}`),
+      })),
+    ],
+    [t],
+  )
+
+  const dueOptions = useMemo(
+    () => [
+      { value: '', label: t('tasks.filters.due.any') },
+      { value: 'overdue', label: t('tasks.filters.due.overdue') },
+      { value: 'today', label: t('tasks.filters.due.today') },
+      { value: 'week', label: t('tasks.filters.due.thisWeek') },
+      { value: 'upcoming', label: t('tasks.filters.due.upcoming') },
+    ],
+    [t],
+  )
+
+  const assigneeOptions = useMemo(
+    () => [
+      { value: '', label: t('tasks.filters.allAssignees') },
+      ...users.map((user) => ({ value: user.id, label: user.name })),
+    ],
+    [t, users],
+  )
 
   return (
     <div className="flex flex-wrap gap-2">

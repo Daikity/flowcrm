@@ -1,5 +1,6 @@
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
-  TASK_STATUS_LABEL,
   TASK_STATUSES,
   type TaskListItem,
   type TaskStatus,
@@ -13,17 +14,22 @@ interface ChangeTaskStatusProps {
   compact?: boolean
 }
 
-const statusOptions = TASK_STATUSES.map((status) => ({
-  value: status,
-  label: TASK_STATUS_LABEL[status],
-}))
-
 export function ChangeTaskStatus({
   task,
   className,
   compact = true,
 }: ChangeTaskStatusProps) {
+  const { t } = useTranslation()
   const [updateTask, { isLoading }] = useUpdateTaskMutation()
+
+  const statusOptions = useMemo(
+    () =>
+      TASK_STATUSES.map((status) => ({
+        value: status,
+        label: t(`enums.taskStatus.${status}`),
+      })),
+    [t],
+  )
 
   async function handleChange(value: string) {
     const status = value as TaskStatus
@@ -47,7 +53,7 @@ export function ChangeTaskStatus({
         onChange={(value) => void handleChange(value)}
         disabled={isLoading}
         className={className ?? 'w-36'}
-        label={`Change status for ${task.title}`}
+        label={t('tasks.changeStatus.aria', { title: task.title })}
       />
     </div>
   )

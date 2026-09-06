@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 import type {
   Customer,
@@ -47,6 +48,7 @@ function parseParams(searchParams: URLSearchParams): CustomersParams & {
 }
 
 export function CustomersPage() {
+  const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
   const parsed = useMemo(() => parseParams(searchParams), [searchParams])
   const [searchInput, setSearchInput] = useState(parsed.searchInput)
@@ -159,8 +161,8 @@ export function CustomersPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <Typography variant="h1">Customers</Typography>
-          <Typography muted>Manage CRM customer records</Typography>
+          <Typography variant="h1">{t('customers.title')}</Typography>
+          <Typography muted>{t('customers.subtitle')}</Typography>
         </div>
         <CreateCustomerButton users={users} />
       </div>

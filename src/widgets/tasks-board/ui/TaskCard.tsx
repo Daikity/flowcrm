@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { TaskPriorityBadge, type TaskListItem } from '@/entities/task'
 import { ChangeTaskStatus } from '@/features/task-change-status'
 import type { User } from '@/entities/user'
@@ -10,14 +11,19 @@ interface TaskCardProps {
   onEdit: (task: TaskListItem) => void
 }
 
-function dueLabel(task: TaskListItem, today: string): string {
-  if (task.dueDate === today) return 'Due today'
-  if (task.isOverdue) return `Overdue · ${formatDate(task.dueDate)}`
-  return formatDate(task.dueDate)
-}
-
 export function TaskCard({ task, assignee, onEdit }: TaskCardProps) {
+  const { t, i18n } = useTranslation()
   const today = new Date().toISOString().slice(0, 10)
+
+  function dueLabel() {
+    if (task.dueDate === today) return t('tasks.due.today')
+    if (task.isOverdue) {
+      return t('tasks.due.overdue', {
+        date: formatDate(task.dueDate, i18n.language),
+      })
+    }
+    return formatDate(task.dueDate, i18n.language)
+  }
 
   return (
     <article
@@ -41,7 +47,7 @@ export function TaskCard({ task, assignee, onEdit }: TaskCardProps) {
                 task.isOverdue ? 'font-medium text-danger' : 'text-text-secondary'
               }`}
             >
-              {dueLabel(task, today)}
+              {dueLabel()}
             </span>
           </div>
 

@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { Button } from '@/shared/ui/button'
 
@@ -11,6 +12,7 @@ export interface ModalProps {
 }
 
 export function Modal({ open, onClose, title, children, className }: ModalProps) {
+  const { t } = useTranslation()
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -42,7 +44,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
     >
       <div className="flex items-center justify-between border-b border-border px-5 py-4">
         <h2 className="text-h3">{title}</h2>
-        <Button variant="ghost" size="sm" onClick={onClose} aria-label="Закрыть">
+        <Button variant="ghost" size="sm" onClick={onClose} aria-label={t('common.modal.close')}>
           ✕
         </Button>
       </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { Deal, DealStage } from '@/entities/deal'
 import { formatCurrency, formatDate } from '@/shared/lib'
 import {
@@ -31,21 +32,25 @@ const stageVariant: Record<
 }
 
 export function RecentDeals({ deals }: RecentDealsProps) {
+  const { t, i18n } = useTranslation()
+
   return (
     <Card className="p-0 overflow-hidden">
       <div className="p-5 pb-0">
         <CardHeader>
-          <CardTitle>Recent deals</CardTitle>
-          <CardDescription>Последние сделки в пайплайне</CardDescription>
+          <CardTitle>{t('dashboard.recentDeals.title')}</CardTitle>
+          <CardDescription>
+            {t('dashboard.recentDeals.description')}
+          </CardDescription>
         </CardHeader>
       </div>
       <Table>
         <THead>
           <TR>
-            <TH>Deal</TH>
-            <TH>Stage</TH>
-            <TH>Value</TH>
-            <TH>Created</TH>
+            <TH>{t('dashboard.recentDeals.columns.deal')}</TH>
+            <TH>{t('dashboard.recentDeals.columns.stage')}</TH>
+            <TH>{t('dashboard.recentDeals.columns.value')}</TH>
+            <TH>{t('dashboard.recentDeals.columns.created')}</TH>
           </TR>
         </THead>
         <TBody>
@@ -53,10 +58,12 @@ export function RecentDeals({ deals }: RecentDealsProps) {
             <TR key={deal.id}>
               <TD className="font-medium">{deal.title}</TD>
               <TD>
-                <Badge variant={stageVariant[deal.stage]}>{deal.stage}</Badge>
+                <Badge variant={stageVariant[deal.stage]}>
+                  {t(`enums.dealStage.${deal.stage}`)}
+                </Badge>
               </TD>
               <TD>{formatCurrency(deal.value)}</TD>
-              <TD>{formatDate(deal.createdAt)}</TD>
+              <TD>{formatDate(deal.createdAt, i18n.language)}</TD>
             </TR>
           ))}
         </TBody>

@@ -1,5 +1,5 @@
+import { useTranslation } from 'react-i18next'
 import {
-  DEAL_STAGE_LABEL,
   DEAL_STAGES,
   type DealListItem,
   type DealsTotals,
@@ -22,6 +22,7 @@ export function DealsKanban({
   totals,
   onEdit,
 }: DealsKanbanProps) {
+  const { t } = useTranslation()
   const usersById = Object.fromEntries(users.map((user) => [user.id, user]))
 
   const byStage = Object.fromEntries(
@@ -44,9 +45,12 @@ export function DealsKanban({
           >
             <div className="flex items-start justify-between gap-2">
               <div>
-                <Typography variant="h3">{DEAL_STAGE_LABEL[stage]}</Typography>
+                <Typography variant="h3">
+                  {t(`enums.dealStage.${stage}`)}
+                </Typography>
                 <Typography muted className="text-small">
-                  {columnTotal.count} · {formatCurrency(columnTotal.value)}
+                  {columnTotal.count} ·{' '}
+                  {formatCurrency(columnTotal.value)}
                 </Typography>
               </div>
             </div>
@@ -54,7 +58,7 @@ export function DealsKanban({
             <div className="flex flex-col gap-2">
               {columnDeals.length === 0 ? (
                 <p className="px-1 py-6 text-center text-small text-text-secondary">
-                  No deals
+                  {t('deals.kanban.emptyColumn')}
                 </p>
               ) : (
                 columnDeals.map((deal) => {

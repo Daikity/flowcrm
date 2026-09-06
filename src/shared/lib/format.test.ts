@@ -39,10 +39,10 @@ describe('formatPercent', () => {
 
 describe('formatDate', () => {
   it('formats ISO date in en-GB style', () => {
-    expect(formatDate('2025-11-12T12:00:00.000Z')).toBe('12 Nov 2025')
+    expect(formatDate('2025-11-12T12:00:00.000Z', 'en')).toBe('12 Nov 2025')
   })
 
   it('formats another ISO timestamp', () => {
-    expect(formatDate('2026-03-01T16:00:00.000Z')).toBe('01 Mar 2026')
+    expect(formatDate('2026-03-01T16:00:00.000Z', 'en')).toBe('01 Mar 2026')
   })
 })

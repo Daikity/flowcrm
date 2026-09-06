@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Button, EmptyState } from '@/shared/ui'
 
 interface DealsErrorProps {
@@ -5,13 +6,15 @@ interface DealsErrorProps {
 }
 
 export function DealsError({ onRetry }: DealsErrorProps) {
+  const { t } = useTranslation()
+
   return (
     <EmptyState
-      title="Something went wrong."
-      description="Unable to load deals."
+      title={t('common.error.title')}
+      description={t('deals.error.description')}
       action={
         <Button type="button" onClick={onRetry}>
-          Try again
+          {t('common.retry')}
         </Button>
       }
     />

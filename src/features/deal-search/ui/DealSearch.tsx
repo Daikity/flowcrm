@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Input } from '@/shared/ui'
 
 interface DealSearchProps {
@@ -6,12 +7,14 @@ interface DealSearchProps {
 }
 
 export function DealSearch({ value, onChange }: DealSearchProps) {
+  const { t } = useTranslation()
+
   return (
     <Input
       value={value}
       onChange={(event) => onChange(event.target.value)}
-      placeholder="Search deals..."
-      aria-label="Search deals"
+      placeholder={t('deals.search.placeholder')}
+      aria-label={t('deals.search.aria')}
       className="max-w-sm"
     />
   )

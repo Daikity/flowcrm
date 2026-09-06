@@ -1,3 +1,12 @@
+import i18n from 'i18next'
+import { LOCALE_TO_INTL, type AppLocale } from '@/shared/config/i18n'
+
+function resolveIntlLocale(locale?: string) {
+  const lang = (locale ?? i18n.language) as AppLocale
+  return LOCALE_TO_INTL[lang] ?? LOCALE_TO_INTL.en
+}
+
+/** Currency stays en-US so amounts remain consistent across UI languages */
 export function formatCurrency(value: number) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -11,8 +20,8 @@ export function formatPercent(value: number) {
   return `${sign}${value.toFixed(1)}%`
 }
 
-export function formatDate(value: string) {
-  return new Intl.DateTimeFormat('en-GB', {
+export function formatDate(value: string, locale?: string) {
+  return new Intl.DateTimeFormat(resolveIntlLocale(locale), {
     day: '2-digit',
     month: 'short',
     year: 'numeric',

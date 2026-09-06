@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next'
 import { Badge } from '@/shared/ui'
-import { TASK_STATUS_LABEL, TASK_STATUS_VARIANT } from '../model/constants'
+import { TASK_STATUS_VARIANT } from '../model/constants'
 import type { TaskStatus } from '../model/types'
 
 interface TaskStatusBadgeProps {
@@ -7,9 +8,11 @@ interface TaskStatusBadgeProps {
 }
 
 export function TaskStatusBadge({ status }: TaskStatusBadgeProps) {
+  const { t } = useTranslation()
+
   return (
     <Badge variant={TASK_STATUS_VARIANT[status]}>
-      {TASK_STATUS_LABEL[status]}
+      {t(`enums.taskStatus.${status}`)}
     </Badge>
   )
 }

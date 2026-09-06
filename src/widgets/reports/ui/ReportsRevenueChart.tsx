@@ -7,6 +7,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import { useTranslation } from 'react-i18next'
 import type { ReportRevenuePoint } from '@/entities/report'
 import { formatCurrency } from '@/shared/lib'
 import { Card, CardDescription, CardHeader, CardTitle, Typography } from '@/shared/ui'
@@ -16,15 +17,17 @@ interface ReportsRevenueChartProps {
 }
 
 export function ReportsRevenueChart({ data }: ReportsRevenueChartProps) {
+  const { t } = useTranslation()
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Revenue</CardTitle>
-        <CardDescription>Выручка won-сделок по месяцам закрытия</CardDescription>
+        <CardTitle>{t('reports.revenue.title')}</CardTitle>
+        <CardDescription>{t('reports.revenue.description')}</CardDescription>
       </CardHeader>
       {data.length === 0 ? (
         <Typography muted className="py-16 text-center">
-          Нет won-сделок в выбранном диапазоне
+          {t('reports.revenue.empty')}
         </Typography>
       ) : (
         <div className="h-64 w-full">

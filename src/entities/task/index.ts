@@ -10,7 +10,7 @@ export type {
   UpdateTaskInput,
 } from './model/types'
 export type { TaskFormValues } from './model/schema'
-export { taskFormSchema } from './model/schema'
+export { createTaskSchema } from './model/schema'
 export {
   TASK_PRIORITIES,
   TASK_PRIORITY_LABEL,

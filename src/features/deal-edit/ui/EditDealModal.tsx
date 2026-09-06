@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { Customer } from '@/entities/customer'
 import {
   DealForm,
@@ -25,6 +26,7 @@ export function EditDealModal({
   open,
   onClose,
 }: EditDealModalProps) {
+  const { t } = useTranslation()
   const [formError, setFormError] = useState('')
   const [updateDeal, { isLoading }] = useUpdateDealMutation()
 
@@ -39,7 +41,7 @@ export function EditDealModal({
       await updateDeal({ id: deal.id, data: values }).unwrap()
       onClose()
     } catch (error) {
-      setFormError(getApiErrorMessage(error, 'Failed to update deal.'))
+      setFormError(getApiErrorMessage(error, t('deals.edit.error')))
     }
   }
 
@@ -49,7 +51,7 @@ export function EditDealModal({
   }
 
   return (
-    <Modal open={open} onClose={handleClose} title="Edit Deal">
+    <Modal open={open} onClose={handleClose} title={t('deals.edit.modalTitle')}>
       <div className="space-y-3">
         {formError ? (
           <Typography variant="small" className="text-danger">
@@ -69,7 +71,7 @@ export function EditDealModal({
             probability: deal.probability,
             expectedCloseDate: deal.expectedCloseDate.slice(0, 10),
           }}
-          submitLabel="Save changes"
+          submitLabel={t('common.actions.saveChanges')}
           isSubmitting={isLoading}
           onSubmit={handleSubmit}
           onCancel={handleClose}

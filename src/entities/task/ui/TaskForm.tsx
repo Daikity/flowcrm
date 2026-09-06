@@ -1,27 +1,13 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useTranslation } from 'react-i18next'
 import type { Customer } from '@/entities/customer'
 import type { DealListItem } from '@/entities/deal'
 import type { User } from '@/entities/user'
 import { Button, DatePicker, Input, Select } from '@/shared/ui'
-import {
-  TASK_PRIORITIES,
-  TASK_PRIORITY_LABEL,
-  TASK_STATUS_LABEL,
-  TASK_STATUSES,
-} from '../model/constants'
-import { taskFormSchema, type TaskFormValues } from '../model/schema'
-
-const statusOptions = TASK_STATUSES.map((status) => ({
-  value: status,
-  label: TASK_STATUS_LABEL[status],
-}))
-
-const priorityOptions = TASK_PRIORITIES.map((priority) => ({
-  value: priority,
-  label: TASK_PRIORITY_LABEL[priority],
-}))
+import { TASK_PRIORITIES, TASK_STATUSES } from '../model/constants'
+import { createTaskSchema, type TaskFormValues } from '../model/schema'
 
 interface TaskFormProps {
   users: User[]
@@ -44,6 +30,8 @@ export function TaskForm({
   onSubmit,
   onCancel,
 }: TaskFormProps) {
+  const { t } = useTranslation()
+  const schema = useMemo(() => createTaskSchema(t), [t])
   const initialCustomerId = defaultValues?.customerId ?? ''
   const [selectedCustomerId, setSelectedCustomerId] =
     useState(initialCustomerId)
@@ -55,7 +43,7 @@ export function TaskForm({
     setValue,
     formState: { errors },
   } = useForm<TaskFormValues>({
-    resolver: zodResolver(taskFormSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       title: '',
       description: '',
@@ -69,13 +57,23 @@ export function TaskForm({
     },
   })
 
+  const statusOptions = TASK_STATUSES.map((status) => ({
+    value: status,
+    label: t(`enums.taskStatus.${status}`),
+  }))
+
+  const priorityOptions = TASK_PRIORITIES.map((priority) => ({
+    value: priority,
+    label: t(`enums.taskPriority.${priority}`),
+  }))
+
   const assigneeOptions = users.map((user) => ({
     value: user.id,
     label: user.name,
   }))
 
   const customerOptions = [
-    { value: '', label: 'No customer' },
+    { value: '', label: t('tasks.form.noCustomer') },
     ...customers.map((customer) => ({
       value: customer.id,
       label: customer.company,
@@ -87,7 +85,7 @@ export function TaskForm({
     : deals
 
   const dealOptions = [
-    { value: '', label: 'No deal' },
+    { value: '', label: t('tasks.form.noDeal') },
     ...filteredDeals.map((deal) => ({
       value: deal.id,
       label: deal.title,
@@ -97,13 +95,13 @@ export function TaskForm({
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
       <Input
-        label="Title"
+        label={t('tasks.form.title')}
         error={errors.title?.message}
         {...register('title')}
       />
 
       <Input
-        label="Description"
+        label={t('tasks.form.description')}
         error={errors.description?.message}
         {...register('description')}
       />
@@ -113,7 +111,7 @@ export function TaskForm({
         control={control}
         render={({ field }) => (
           <Select
-            label="Status"
+            label={t('tasks.form.status')}
             options={statusOptions}
             value={field.value}
             onChange={field.onChange}
@@ -127,7 +125,7 @@ export function TaskForm({
         control={control}
         render={({ field }) => (
           <Select
-            label="Priority"
+            label={t('tasks.form.priority')}
             options={priorityOptions}
             value={field.value}
             onChange={field.onChange}
@@ -141,7 +139,7 @@ export function TaskForm({
         control={control}
         render={({ field }) => (
           <Select
-            label="Assignee"
+            label={t('tasks.form.assignee')}
             options={assigneeOptions}
             value={field.value}
             onChange={field.onChange}
@@ -155,7 +153,7 @@ export function TaskForm({
         control={control}
         render={({ field }) => (
           <DatePicker
-            label="Due date"
+            label={t('tasks.form.dueDate')}
             value={field.value}
             onChange={field.onChange}
             clearable={false}
@@ -169,7 +167,7 @@ export function TaskForm({
         control={control}
         render={({ field }) => (
           <Select
-            label="Customer"
+            label={t('tasks.form.customer')}
             options={customerOptions}
             value={field.value ?? ''}
             onChange={(value) => {
@@ -187,7 +185,7 @@ export function TaskForm({
         control={control}
         render={({ field }) => (
           <Select
-            label="Deal"
+            label={t('tasks.form.deal')}
             options={dealOptions}
             value={field.value ?? ''}
             onChange={field.onChange}
@@ -198,7 +196,7 @@ export function TaskForm({
 
       <div className="mt-2 flex justify-end gap-2">
         <Button type="button" variant="secondary" onClick={onCancel}>
-          Cancel
+          {t('common.actions.cancel')}
         </Button>
         <Button type="submit" disabled={isSubmitting}>
           {submitLabel}

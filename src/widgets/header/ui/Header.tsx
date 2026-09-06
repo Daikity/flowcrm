@@ -1,19 +1,21 @@
 import { matchPath, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { getSessionUser, LogoutButton } from '@/features/auth'
-import { routeTitles } from '@/shared/config'
+import { LanguageSwitcher } from '@/features/language-switch'
+import { routeTitleKeys } from '@/shared/config'
 import { Avatar, Button, ShellHeader, Typography } from '@/shared/ui'
 
-function resolvePageTitle(pathname: string) {
-  const exact = routeTitles[pathname]
+function resolvePageTitleKey(pathname: string) {
+  const exact = routeTitleKeys[pathname]
   if (exact) return exact
 
-  for (const [pattern, title] of Object.entries(routeTitles)) {
+  for (const [pattern, titleKey] of Object.entries(routeTitleKeys)) {
     if (pattern.includes(':') && matchPath({ path: pattern, end: true }, pathname)) {
-      return title
+      return titleKey
     }
   }
 
-  return 'FlowCRM'
+  return 'app.name'
 }
 
 function BellIcon() {
@@ -37,7 +39,8 @@ function BellIcon() {
 
 export function Header() {
   const { pathname } = useLocation()
-  const title = resolvePageTitle(pathname)
+  const { t } = useTranslation()
+  const title = t(resolvePageTitleKey(pathname))
   const user = getSessionUser()
 
   return (
@@ -45,11 +48,12 @@ export function Header() {
       <Typography variant="h3">{title}</Typography>
 
       <div className="flex items-center gap-2">
+        <LanguageSwitcher />
         <Button
           variant="ghost"
           size="sm"
           className="size-9 px-0"
-          aria-label="Уведомления"
+          aria-label={t('header.notifications')}
         >
           <BellIcon />
         </Button>

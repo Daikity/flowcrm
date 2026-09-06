@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { Customer } from '@/entities/customer'
 import type { DealListItem } from '@/entities/deal'
 import { TaskForm, type TaskFormValues } from '@/entities/task'
@@ -31,6 +32,7 @@ export function CreateTaskButton({
   customers,
   deals,
 }: CreateTaskButtonProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [formError, setFormError] = useState('')
   const [createTask, { isLoading }] = useCreateTaskMutation()
@@ -41,7 +43,7 @@ export function CreateTaskButton({
       await createTask(toCreatePayload(values)).unwrap()
       setOpen(false)
     } catch (error) {
-      setFormError(getApiErrorMessage(error, 'Failed to create task.'))
+      setFormError(getApiErrorMessage(error, t('tasks.create.error')))
     }
   }
 
@@ -53,10 +55,10 @@ export function CreateTaskButton({
   return (
     <>
       <Button type="button" onClick={() => setOpen(true)}>
-        + New Task
+        {t('tasks.create.button')}
       </Button>
 
-      <Modal open={open} onClose={handleClose} title="Create Task">
+      <Modal open={open} onClose={handleClose} title={t('tasks.create.modalTitle')}>
         <div className="space-y-3">
           {formError ? (
             <Typography variant="small" className="text-danger">
@@ -68,7 +70,7 @@ export function CreateTaskButton({
             users={users}
             customers={customers}
             deals={deals}
-            submitLabel="Create task"
+            submitLabel={t('tasks.create.submit')}
             isSubmitting={isLoading}
             onSubmit={handleSubmit}
             onCancel={handleClose}

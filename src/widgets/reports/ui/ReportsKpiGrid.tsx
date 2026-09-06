@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { ReportsKpis } from '@/entities/report'
 import { formatCurrency } from '@/shared/lib'
 import { Card, Typography } from '@/shared/ui'
@@ -23,13 +24,18 @@ function KpiCard({ label, value }: KpiCardProps) {
 }
 
 export function ReportsKpiGrid({ kpis }: ReportsKpiGridProps) {
+  const { t } = useTranslation()
+
   return (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <KpiCard label="Revenue" value={formatCurrency(kpis.revenue)} />
-      <KpiCard label="Won Deals" value={String(kpis.wonDeals)} />
-      <KpiCard label="Win Rate" value={`${kpis.winRate}%`} />
       <KpiCard
-        label="Pipeline Value"
+        label={t('reports.kpi.revenue')}
+        value={formatCurrency(kpis.revenue)}
+      />
+      <KpiCard label={t('reports.kpi.wonDeals')} value={String(kpis.wonDeals)} />
+      <KpiCard label={t('reports.kpi.winRate')} value={`${kpis.winRate}%`} />
+      <KpiCard
+        label={t('reports.kpi.pipelineValue')}
         value={formatCurrency(kpis.pipelineValue)}
       />
     </div>

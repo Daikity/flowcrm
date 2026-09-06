@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { CustomerIndustry, CustomerStatus } from '@/entities/customer'
 import type { User } from '@/entities/user'
 import { Select } from '@/shared/ui'
@@ -12,21 +14,14 @@ interface CustomerFiltersProps {
   onOwnerChange: (value: string) => void
 }
 
-const statusOptions = [
-  { value: '', label: 'All statuses' },
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-  { value: 'lead', label: 'Lead' },
-]
-
-const industryOptions = [
-  { value: '', label: 'All industries' },
-  { value: 'Technology', label: 'Technology' },
-  { value: 'Finance', label: 'Finance' },
-  { value: 'Healthcare', label: 'Healthcare' },
-  { value: 'Retail', label: 'Retail' },
-  { value: 'Manufacturing', label: 'Manufacturing' },
-]
+const STATUSES = ['active', 'inactive', 'lead'] as const
+const INDUSTRIES = [
+  'Technology',
+  'Finance',
+  'Healthcare',
+  'Retail',
+  'Manufacturing',
+] as const
 
 export function CustomerFilters({
   status = '',
@@ -37,10 +32,37 @@ export function CustomerFilters({
   onIndustryChange,
   onOwnerChange,
 }: CustomerFiltersProps) {
-  const ownerOptions = [
-    { value: '', label: 'All owners' },
-    ...users.map((user) => ({ value: user.id, label: user.name })),
-  ]
+  const { t } = useTranslation()
+
+  const statusOptions = useMemo(
+    () => [
+      { value: '', label: t('customers.filters.allStatuses') },
+      ...STATUSES.map((item) => ({
+        value: item,
+        label: t(`enums.customerStatus.${item}`),
+      })),
+    ],
+    [t],
+  )
+
+  const industryOptions = useMemo(
+    () => [
+      { value: '', label: t('customers.filters.allIndustries') },
+      ...INDUSTRIES.map((item) => ({
+        value: item,
+        label: t(`enums.industry.${item}`),
+      })),
+    ],
+    [t],
+  )
+
+  const ownerOptions = useMemo(
+    () => [
+      { value: '', label: t('common.filters.allOwners') },
+      ...users.map((user) => ({ value: user.id, label: user.name })),
+    ],
+    [t, users],
+  )
 
   return (
     <div className="flex flex-wrap gap-2">

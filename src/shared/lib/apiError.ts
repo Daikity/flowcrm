@@ -1,4 +1,5 @@
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { i18n } from '@/shared/config/i18n'
 
 export function isNotFoundError(error: unknown): boolean {
   return isFetchBaseQueryError(error) && error.status === 404
@@ -6,10 +7,12 @@ export function isNotFoundError(error: unknown): boolean {
 
 export function getApiErrorMessage(
   error: unknown,
-  fallback = 'Something went wrong. Please try again.',
+  fallback?: string,
 ): string {
+  const resolvedFallback = fallback ?? i18n.t('common.errors.generic')
+
   if (!isFetchBaseQueryError(error)) {
-    return fallback
+    return resolvedFallback
   }
 
   if (typeof error.data === 'object' && error.data !== null && 'message' in error.data) {
@@ -20,15 +23,15 @@ export function getApiErrorMessage(
   }
 
   if (typeof error.status === 'number') {
-    if (error.status === 404) return 'Resource not found.'
-    if (error.status >= 500) return 'Server error. Please try again later.'
+    if (error.status === 404) return i18n.t('common.errors.notFound')
+    if (error.status >= 500) return i18n.t('common.errors.server')
   }
 
   if (error.status === 'FETCH_ERROR') {
-    return 'Network error. Check your connection.'
+    return i18n.t('common.errors.network')
   }
 
-  return fallback
+  return resolvedFallback
 }
 
 function isFetchBaseQueryError(error: unknown): error is FetchBaseQueryError {

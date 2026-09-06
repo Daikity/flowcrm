@@ -1,5 +1,6 @@
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
-  DEAL_STAGE_LABEL,
   DEAL_STAGE_PROBABILITY,
   DEAL_STAGES,
   type DealListItem,
@@ -15,17 +16,22 @@ interface ChangeDealStageProps {
   compact?: boolean
 }
 
-const stageOptions = DEAL_STAGES.map((stage) => ({
-  value: stage,
-  label: DEAL_STAGE_LABEL[stage],
-}))
-
 export function ChangeDealStage({
   deal,
   className,
   compact = true,
 }: ChangeDealStageProps) {
+  const { t } = useTranslation()
   const [updateDeal, { isLoading }] = useUpdateDealMutation()
+
+  const stageOptions = useMemo(
+    () =>
+      DEAL_STAGES.map((stage) => ({
+        value: stage,
+        label: t(`enums.dealStage.${stage}`),
+      })),
+    [t],
+  )
 
   async function handleChange(value: string) {
     const stage = value as DealStage
@@ -52,7 +58,7 @@ export function ChangeDealStage({
         onChange={(value) => void handleChange(value)}
         disabled={isLoading}
         className={className ?? 'w-36'}
-        label={`Change stage for ${deal.title}`}
+        label={t('deals.changeStage.aria', { title: deal.title })}
       />
     </div>
   )

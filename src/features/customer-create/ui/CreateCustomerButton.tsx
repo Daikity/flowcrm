@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { CustomerForm, type CustomerFormValues } from '@/entities/customer'
 import type { User } from '@/entities/user'
 import { useCreateCustomerMutation } from '@/shared/api'
@@ -10,6 +11,7 @@ interface CreateCustomerButtonProps {
 }
 
 export function CreateCustomerButton({ users }: CreateCustomerButtonProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [formError, setFormError] = useState('')
   const [createCustomer, { isLoading }] = useCreateCustomerMutation()
@@ -20,7 +22,7 @@ export function CreateCustomerButton({ users }: CreateCustomerButtonProps) {
       await createCustomer(values).unwrap()
       setOpen(false)
     } catch (error) {
-      setFormError(getApiErrorMessage(error, 'Failed to create customer.'))
+      setFormError(getApiErrorMessage(error, t('customers.create.error')))
     }
   }
 
@@ -32,10 +34,10 @@ export function CreateCustomerButton({ users }: CreateCustomerButtonProps) {
   return (
     <>
       <Button type="button" onClick={() => setOpen(true)}>
-        + Add customer
+        {t('customers.create.button')}
       </Button>
 
-      <Modal open={open} onClose={handleClose} title="Create Customer">
+      <Modal open={open} onClose={handleClose} title={t('customers.create.modalTitle')}>
         <div className="space-y-3">
           {formError ? (
             <Typography variant="small" className="text-danger">
@@ -45,7 +47,7 @@ export function CreateCustomerButton({ users }: CreateCustomerButtonProps) {
           <CustomerForm
             key={open ? 'open' : 'closed'}
             users={users}
-            submitLabel="Create customer"
+            submitLabel={t('customers.create.submit')}
             isSubmitting={isLoading}
             onSubmit={handleSubmit}
             onCancel={handleClose}

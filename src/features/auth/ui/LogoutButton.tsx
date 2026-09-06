@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/shared/ui'
 import { clearAuth } from '../model/authStorage'
 
 export function LogoutButton() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   return (
@@ -14,7 +16,7 @@ export function LogoutButton() {
         navigate('/', { replace: true })
       }}
     >
-      Выйти
+      {t('auth.logout')}
     </Button>
   )
 }

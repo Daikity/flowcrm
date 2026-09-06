@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { CustomerForm, type Customer, type CustomerFormValues } from '@/entities/customer'
 import type { User } from '@/entities/user'
 import { useUpdateCustomerMutation } from '@/shared/api'
@@ -18,6 +19,7 @@ export function EditCustomerModal({
   open,
   onClose,
 }: EditCustomerModalProps) {
+  const { t } = useTranslation()
   const [formError, setFormError] = useState('')
   const [updateCustomer, { isLoading }] = useUpdateCustomerMutation()
 
@@ -32,7 +34,7 @@ export function EditCustomerModal({
       await updateCustomer({ id: customer.id, data: values }).unwrap()
       onClose()
     } catch (error) {
-      setFormError(getApiErrorMessage(error, 'Failed to update customer.'))
+      setFormError(getApiErrorMessage(error, t('customers.edit.error')))
     }
   }
 
@@ -42,7 +44,7 @@ export function EditCustomerModal({
   }
 
   return (
-    <Modal open={open} onClose={handleClose} title="Edit Customer">
+    <Modal open={open} onClose={handleClose} title={t('customers.edit.modalTitle')}>
       <div className="space-y-3">
         {formError ? (
           <Typography variant="small" className="text-danger">
@@ -61,7 +63,7 @@ export function EditCustomerModal({
             status: customer.status,
             ownerId: customer.ownerId,
           }}
-          submitLabel="Save changes"
+          submitLabel={t('common.actions.saveChanges')}
           isSubmitting={isLoading}
           onSubmit={handleSubmit}
           onCancel={handleClose}

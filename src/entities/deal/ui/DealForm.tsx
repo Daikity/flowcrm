@@ -1,20 +1,19 @@
+import { useMemo } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useTranslation } from 'react-i18next'
+import type { z } from 'zod'
 import type { Customer } from '@/entities/customer'
 import type { User } from '@/entities/user'
 import { Button, DatePicker, Input, Select } from '@/shared/ui'
 import {
-  DEAL_STAGE_LABEL,
   DEAL_STAGE_PROBABILITY,
   DEAL_STAGES,
 } from '../model/constants'
-import { dealFormSchema, type DealFormValues } from '../model/schema'
+import { createDealSchema, type DealFormValues } from '../model/schema'
 import type { DealStage } from '../model/types'
 
-const stageOptions = DEAL_STAGES.map((stage) => ({
-  value: stage,
-  label: DEAL_STAGE_LABEL[stage],
-}))
+type DealSchema = ReturnType<typeof createDealSchema>
 
 interface DealFormProps {
   users: User[]
@@ -35,14 +34,17 @@ export function DealForm({
   onSubmit,
   onCancel,
 }: DealFormProps) {
+  const { t } = useTranslation()
+  const schema = useMemo(() => createDealSchema(t), [t])
+
   const {
     register,
     control,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<DealFormValues>({
-    resolver: zodResolver(dealFormSchema),
+  } = useForm<z.input<DealSchema>, unknown, DealFormValues>({
+    resolver: zodResolver(schema),
     defaultValues: {
       title: '',
       customerId: customers[0]?.id ?? '',
@@ -54,6 +56,11 @@ export function DealForm({
       ...defaultValues,
     },
   })
+
+  const stageOptions = DEAL_STAGES.map((stage) => ({
+    value: stage,
+    label: t(`enums.dealStage.${stage}`),
+  }))
 
   const ownerOptions = users.map((user) => ({
     value: user.id,
@@ -68,7 +75,7 @@ export function DealForm({
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
       <Input
-        label="Title"
+        label={t('deals.form.title')}
         error={errors.title?.message}
         {...register('title')}
       />
@@ -78,7 +85,7 @@ export function DealForm({
         control={control}
         render={({ field }) => (
           <Select
-            label="Customer"
+            label={t('deals.form.customer')}
             options={customerOptions}
             value={field.value}
             onChange={field.onChange}
@@ -92,7 +99,7 @@ export function DealForm({
         control={control}
         render={({ field }) => (
           <Select
-            label="Owner"
+            label={t('deals.form.owner')}
             options={ownerOptions}
             value={field.value}
             onChange={field.onChange}
@@ -102,7 +109,7 @@ export function DealForm({
       />
 
       <Input
-        label="Value ($)"
+        label={t('deals.form.value')}
         type="number"
         min={0}
         error={errors.value?.message}
@@ -114,7 +121,7 @@ export function DealForm({
         control={control}
         render={({ field }) => (
           <Select
-            label="Stage"
+            label={t('deals.form.stage')}
             options={stageOptions}
             value={field.value}
             onChange={(value) => {
@@ -128,7 +135,7 @@ export function DealForm({
       />
 
       <Input
-        label="Probability (%)"
+        label={t('deals.form.probability')}
         type="number"
         min={0}
         max={100}
@@ -141,7 +148,7 @@ export function DealForm({
         control={control}
         render={({ field }) => (
           <DatePicker
-            label="Expected close date"
+            label={t('deals.form.expectedClose')}
             value={field.value}
             onChange={field.onChange}
             clearable={false}
@@ -152,7 +159,7 @@ export function DealForm({
 
       <div className="mt-2 flex justify-end gap-2">
         <Button type="button" variant="secondary" onClick={onCancel}>
-          Cancel
+          {t('common.actions.cancel')}
         </Button>
         <Button type="submit" disabled={isSubmitting}>
           {submitLabel}

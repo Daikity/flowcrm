@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { EmptyState } from '@/shared/ui'
 
 interface CustomerTableEmptyProps {
@@ -10,13 +11,13 @@ export function CustomerTableEmpty({
   hasFilters,
   action,
 }: CustomerTableEmptyProps) {
+  const { t } = useTranslation()
+
   return (
     <EmptyState
-      title="No customers found."
+      title={t('customers.empty.title')}
       description={
-        hasFilters
-          ? 'Try changing your filters or create a new customer.'
-          : 'Create your first customer to get started.'
+        hasFilters ? t('customers.empty.filtered') : t('customers.empty.default')
       }
       action={action}
     />

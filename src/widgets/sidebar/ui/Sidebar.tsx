@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 import { getSessionUser } from '@/features/auth'
 import { env, mainNav, secondaryNav, type NavItem } from '@/shared/config'
@@ -15,28 +16,33 @@ const navIcons: Record<string, ReactNode> = {
 }
 
 function NavList({ items }: { items: NavItem[] }) {
+  const { t } = useTranslation()
+
   return (
     <nav className="flex flex-col gap-1 px-2 md:px-3">
-      {items.map((item) => (
-        <NavLink
-          key={item.to}
-          to={item.to}
-          end={item.end}
-          title={item.label}
-          aria-label={item.label}
-          className={({ isActive }) =>
-            cn(
-              'flex items-center justify-center gap-0 rounded-md px-0 py-2.5 text-body font-medium text-text-secondary transition-colors hover:bg-surface-secondary hover:text-text-primary md:justify-start md:gap-3 md:px-3 md:py-2',
-              isActive && 'bg-surface-secondary text-text-primary',
-            )
-          }
-        >
-          <span className="inline-flex size-5 shrink-0 items-center justify-center [&_svg]:size-5">
-            {navIcons[item.to]}
-          </span>
-          <span className="hidden truncate md:inline">{item.label}</span>
-        </NavLink>
-      ))}
+      {items.map((item) => {
+        const label = t(item.labelKey)
+        return (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.end}
+            title={label}
+            aria-label={label}
+            className={({ isActive }) =>
+              cn(
+                'flex items-center justify-center gap-0 rounded-md px-0 py-2.5 text-body font-medium text-text-secondary transition-colors hover:bg-surface-secondary hover:text-text-primary md:justify-start md:gap-3 md:px-3 md:py-2',
+                isActive && 'bg-surface-secondary text-text-primary',
+              )
+            }
+          >
+            <span className="inline-flex size-5 shrink-0 items-center justify-center [&_svg]:size-5">
+              {navIcons[item.to]}
+            </span>
+            <span className="hidden truncate md:inline">{label}</span>
+          </NavLink>
+        )
+      })}
     </nav>
   )
 }

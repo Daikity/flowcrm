@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Button, EmptyState } from '@/shared/ui'
 
 interface TasksErrorProps {
@@ -5,13 +6,15 @@ interface TasksErrorProps {
 }
 
 export function TasksError({ onRetry }: TasksErrorProps) {
+  const { t } = useTranslation()
+
   return (
     <EmptyState
-      title="Something went wrong."
-      description="Unable to load tasks."
+      title={t('common.error.title')}
+      description={t('tasks.error.description')}
       action={
         <Button type="button" onClick={onRetry}>
-          Try again
+          {t('common.retry')}
         </Button>
       }
     />

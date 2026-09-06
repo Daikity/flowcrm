@@ -1,3 +1,4 @@
+import '@/shared/config/i18n'
 import { StoreProvider } from './providers'
 import { AppRouter } from './router'
 

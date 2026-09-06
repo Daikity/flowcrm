@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { DealStageBadge, type DealListItem } from '@/entities/deal'
 import { ChangeDealStage } from '@/features/deal-change-stage'
 import type { User } from '@/entities/user'
@@ -34,6 +35,7 @@ export function DealsTable({
   onSort,
   onEdit,
 }: DealsTableProps) {
+  const { t, i18n } = useTranslation()
   const usersById = Object.fromEntries(users.map((user) => [user.id, user]))
 
   function sortLabel(column: string) {
@@ -49,28 +51,32 @@ export function DealsTable({
             <TR>
               <TH>
                 <button type="button" onClick={() => onSort('title')}>
-                  Deal{sortLabel('title')}
+                  {t('deals.table.columns.deal')}
+                  {sortLabel('title')}
                 </button>
               </TH>
-              <TH>Customer</TH>
-              <TH>Stage</TH>
+              <TH>{t('deals.table.columns.customer')}</TH>
+              <TH>{t('deals.table.columns.stage')}</TH>
               <TH>
                 <button type="button" onClick={() => onSort('value')}>
-                  Value{sortLabel('value')}
+                  {t('deals.table.columns.value')}
+                  {sortLabel('value')}
                 </button>
               </TH>
               <TH>
                 <button type="button" onClick={() => onSort('probability')}>
-                  Probability{sortLabel('probability')}
+                  {t('deals.table.columns.probability')}
+                  {sortLabel('probability')}
                 </button>
               </TH>
-              <TH>Owner</TH>
+              <TH>{t('deals.table.columns.owner')}</TH>
               <TH>
                 <button type="button" onClick={() => onSort('expectedCloseDate')}>
-                  Close{sortLabel('expectedCloseDate')}
+                  {t('deals.table.columns.close')}
+                  {sortLabel('expectedCloseDate')}
                 </button>
               </TH>
-              <TH className="w-16">Actions</TH>
+              <TH className="w-16">{t('deals.table.columns.actions')}</TH>
             </TR>
           </THead>
           <TBody>
@@ -96,7 +102,7 @@ export function DealsTable({
                       '—'
                     )}
                   </TD>
-                  <TD>{formatDate(deal.expectedCloseDate)}</TD>
+                  <TD>{formatDate(deal.expectedCloseDate, i18n.language)}</TD>
                   <TD>
                     <Dropdown
                       triggerLabel="⋮"
@@ -106,7 +112,7 @@ export function DealsTable({
                       items={[
                         {
                           id: 'edit',
-                          label: 'Edit',
+                          label: t('common.actions.edit'),
                           onSelect: () => onEdit(deal),
                         },
                       ]}
@@ -140,7 +146,7 @@ export function DealsTable({
                   items={[
                     {
                       id: 'edit',
-                      label: 'Edit',
+                      label: t('common.actions.edit'),
                       onSelect: () => onEdit(deal),
                     },
                   ]}
@@ -159,7 +165,9 @@ export function DealsTable({
               </div>
 
               <div className="mt-3 flex items-center justify-between">
-                <span className="font-medium">{formatCurrency(deal.value)}</span>
+                <span className="font-medium">
+                  {formatCurrency(deal.value)}
+                </span>
                 {owner ? <Avatar name={owner.name} size="sm" /> : null}
               </div>
             </Card>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { Customer } from '@/entities/customer'
 import { useDeleteCustomerMutation } from '@/shared/api'
 import { getApiErrorMessage } from '@/shared/lib'
@@ -17,6 +18,7 @@ export function DeleteCustomerModal({
   onClose,
   onDeleted,
 }: DeleteCustomerModalProps) {
+  const { t } = useTranslation()
   const [formError, setFormError] = useState('')
   const [deleteCustomer, { isLoading }] = useDeleteCustomerMutation()
 
@@ -32,7 +34,7 @@ export function DeleteCustomerModal({
       onClose()
       onDeleted?.()
     } catch (error) {
-      setFormError(getApiErrorMessage(error, 'Failed to delete customer.'))
+      setFormError(getApiErrorMessage(error, t('customers.delete.error')))
     }
   }
 
@@ -42,11 +44,10 @@ export function DeleteCustomerModal({
   }
 
   return (
-    <Modal open={open} onClose={handleClose} title="Delete customer?">
+    <Modal open={open} onClose={handleClose} title={t('customers.delete.modalTitle')}>
       <div className="space-y-4">
         <Typography muted>
-          Are you sure you want to delete{' '}
-          <span className="font-medium text-text-primary">{customer.company}</span>?
+          {t('customers.delete.confirm', { company: customer.company })}
         </Typography>
         {formError ? (
           <Typography variant="small" className="text-danger">
@@ -55,7 +56,7 @@ export function DeleteCustomerModal({
         ) : null}
         <div className="flex justify-end gap-2">
           <Button type="button" variant="secondary" onClick={handleClose}>
-            Cancel
+            {t('common.actions.cancel')}
           </Button>
           <Button
             type="button"
@@ -65,7 +66,7 @@ export function DeleteCustomerModal({
               void handleDelete()
             }}
           >
-            Delete
+            {t('common.actions.delete')}
           </Button>
         </div>
       </div>

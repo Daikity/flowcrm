@@ -10,6 +10,7 @@ B2B CRM для управления продажами: клиенты, сдел
 - React Router
 - React Hook Form + Zod
 - Recharts
+- i18next / react-i18next (en, ru, de, fr)
 - MSW (mock API)
 - Vitest
 
@@ -71,6 +72,14 @@ UI → RTK Query → /api/* → MSW → mock data → cache → UI
 - Recharts: Area (revenue по месяцам) + Bar (pipeline by stage)
 - breakdown by owner, loading / error / empty, responsive
 - derived data в MSW + RTK Query + тесты handlers
+
+### 6. i18n
+
+- `react-i18next` + локали `en` / `ru` / `de` / `fr`
+- переключатель языка в header
+- UI-строки (auth, dashboard, customers, deals, tasks, reports, shared UI) через `t(...)`
+- zod-схемы форм — factory с `TFunction` для локализованных ошибок валидации
+- даты и валюта через `Intl` с учётом выбранной локали
 
 ## Команды
 

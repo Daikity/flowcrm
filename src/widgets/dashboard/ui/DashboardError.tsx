@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Button, EmptyState } from '@/shared/ui'
 
 interface DashboardErrorProps {
@@ -5,13 +6,15 @@ interface DashboardErrorProps {
 }
 
 export function DashboardError({ onRetry }: DashboardErrorProps) {
+  const { t } = useTranslation()
+
   return (
     <EmptyState
-      title="Не удалось загрузить dashboard"
-      description="Проверьте соединение или попробуйте ещё раз."
+      title={t('dashboard.error.title')}
+      description={t('dashboard.error.description')}
       action={
         <Button type="button" onClick={onRetry}>
-          Повторить
+          {t('common.retry')}
         </Button>
       }
     />

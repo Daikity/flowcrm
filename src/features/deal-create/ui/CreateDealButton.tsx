@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { Customer } from '@/entities/customer'
 import { DealForm, type DealFormValues } from '@/entities/deal'
 import type { User } from '@/entities/user'
@@ -12,6 +13,7 @@ interface CreateDealButtonProps {
 }
 
 export function CreateDealButton({ users, customers }: CreateDealButtonProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [formError, setFormError] = useState('')
   const [createDeal, { isLoading }] = useCreateDealMutation()
@@ -22,7 +24,7 @@ export function CreateDealButton({ users, customers }: CreateDealButtonProps) {
       await createDeal(values).unwrap()
       setOpen(false)
     } catch (error) {
-      setFormError(getApiErrorMessage(error, 'Failed to create deal.'))
+      setFormError(getApiErrorMessage(error, t('deals.create.error')))
     }
   }
 
@@ -34,10 +36,10 @@ export function CreateDealButton({ users, customers }: CreateDealButtonProps) {
   return (
     <>
       <Button type="button" onClick={() => setOpen(true)}>
-        + Add deal
+        {t('deals.create.button')}
       </Button>
 
-      <Modal open={open} onClose={handleClose} title="Create Deal">
+      <Modal open={open} onClose={handleClose} title={t('deals.create.modalTitle')}>
         <div className="space-y-3">
           {formError ? (
             <Typography variant="small" className="text-danger">
@@ -48,7 +50,7 @@ export function CreateDealButton({ users, customers }: CreateDealButtonProps) {
             key={open ? 'open' : 'closed'}
             users={users}
             customers={customers}
-            submitLabel="Create deal"
+            submitLabel={t('deals.create.submit')}
             isSubmitting={isLoading}
             onSubmit={handleSubmit}
             onCancel={handleClose}

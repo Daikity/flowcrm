@@ -1,4 +1,6 @@
 import { useId, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { LOCALE_TO_INTL, type AppLocale } from '@/shared/config/i18n'
 import {
   addMonths,
   compareIsoDates,
@@ -10,7 +12,7 @@ import {
 } from '@/shared/lib/date'
 import { cn } from '@/shared/lib'
 
-const WEEKDAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as const
+const WEEKDAY_KEYS = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'] as const
 
 export interface CalendarProps {
   value?: string
@@ -27,7 +29,10 @@ export function Calendar({
   max,
   className,
 }: CalendarProps) {
+  const { t, i18n } = useTranslation()
   const labelId = useId()
+  const intlLocale =
+    LOCALE_TO_INTL[i18n.language as AppLocale] ?? LOCALE_TO_INTL.en
   const [viewDate, setViewDate] = useState(() => {
     const selected = value ? parseIsoDate(value) : null
     return startOfMonth(selected ?? new Date())
@@ -47,7 +52,7 @@ export function Calendar({
       <div className="mb-3 flex items-center justify-between gap-2">
         <button
           type="button"
-          aria-label="Previous month"
+          aria-label={t('common.calendar.prevMonth')}
           className="inline-flex size-8 items-center justify-center rounded-md text-text-secondary transition hover:bg-surface-secondary hover:text-text-primary"
           onClick={() => setViewDate((current) => addMonths(current, -1))}
         >
@@ -57,11 +62,11 @@ export function Calendar({
           id={labelId}
           className="text-small font-semibold text-text-primary"
         >
-          {formatMonthYear(viewDate)}
+          {formatMonthYear(viewDate, intlLocale)}
         </p>
         <button
           type="button"
-          aria-label="Next month"
+          aria-label={t('common.calendar.nextMonth')}
           className="inline-flex size-8 items-center justify-center rounded-md text-text-secondary transition hover:bg-surface-secondary hover:text-text-primary"
           onClick={() => setViewDate((current) => addMonths(current, 1))}
         >
@@ -70,12 +75,12 @@ export function Calendar({
       </div>
 
       <div className="mb-1 grid grid-cols-7 gap-1" aria-hidden>
-        {WEEKDAYS.map((day) => (
+        {WEEKDAY_KEYS.map((day) => (
           <div
             key={day}
             className="flex h-8 items-center justify-center text-[11px] font-medium text-text-secondary"
           >
-            {day}
+            {t(`common.calendar.weekdays.${day}`)}
           </div>
         ))}
       </div>

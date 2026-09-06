@@ -1,25 +1,23 @@
+import { useMemo } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useTranslation } from 'react-i18next'
 import type { User } from '@/entities/user'
 import { Button, Input, Select } from '@/shared/ui'
 import {
-  customerFormSchema,
+  createCustomerSchema,
   type CustomerFormValues,
 } from '../model/schema'
 
-const industryOptions = [
-  { value: 'Technology', label: 'Technology' },
-  { value: 'Finance', label: 'Finance' },
-  { value: 'Healthcare', label: 'Healthcare' },
-  { value: 'Retail', label: 'Retail' },
-  { value: 'Manufacturing', label: 'Manufacturing' },
-]
+const INDUSTRIES = [
+  'Technology',
+  'Finance',
+  'Healthcare',
+  'Retail',
+  'Manufacturing',
+] as const
 
-const statusOptions = [
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-  { value: 'lead', label: 'Lead' },
-]
+const STATUSES = ['active', 'inactive', 'lead'] as const
 
 interface CustomerFormProps {
   users: User[]
@@ -38,13 +36,16 @@ export function CustomerForm({
   onSubmit,
   onCancel,
 }: CustomerFormProps) {
+  const { t } = useTranslation()
+  const schema = useMemo(() => createCustomerSchema(t), [t])
+
   const {
     register,
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<CustomerFormValues>({
-    resolver: zodResolver(customerFormSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       name: '',
       company: '',
@@ -57,6 +58,16 @@ export function CustomerForm({
     },
   })
 
+  const industryOptions = INDUSTRIES.map((industry) => ({
+    value: industry,
+    label: t(`enums.industry.${industry}`),
+  }))
+
+  const statusOptions = STATUSES.map((status) => ({
+    value: status,
+    label: t(`enums.customerStatus.${status}`),
+  }))
+
   const ownerOptions = users.map((user) => ({
     value: user.id,
     label: user.name,
@@ -65,23 +76,23 @@ export function CustomerForm({
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
       <Input
-        label="Name"
+        label={t('customers.form.name')}
         error={errors.name?.message}
         {...register('name')}
       />
       <Input
-        label="Company"
+        label={t('customers.form.company')}
         error={errors.company?.message}
         {...register('company')}
       />
       <Input
-        label="Email"
+        label={t('customers.form.email')}
         type="email"
         error={errors.email?.message}
         {...register('email')}
       />
       <Input
-        label="Phone"
+        label={t('customers.form.phone')}
         error={errors.phone?.message}
         {...register('phone')}
       />
@@ -91,7 +102,7 @@ export function CustomerForm({
         control={control}
         render={({ field }) => (
           <Select
-            label="Industry"
+            label={t('customers.form.industry')}
             options={industryOptions}
             value={field.value}
             onChange={field.onChange}
@@ -105,7 +116,7 @@ export function CustomerForm({
         control={control}
         render={({ field }) => (
           <Select
-            label="Status"
+            label={t('customers.form.status')}
             options={statusOptions}
             value={field.value}
             onChange={field.onChange}
@@ -119,7 +130,7 @@ export function CustomerForm({
         control={control}
         render={({ field }) => (
           <Select
-            label="Owner"
+            label={t('customers.form.owner')}
             options={ownerOptions}
             value={field.value}
             onChange={field.onChange}
@@ -130,7 +141,7 @@ export function CustomerForm({
 
       <div className="mt-2 flex justify-end gap-2">
         <Button type="button" variant="secondary" onClick={onCancel}>
-          Cancel
+          {t('common.actions.cancel')}
         </Button>
         <Button type="submit" disabled={isSubmitting}>
           {submitLabel}

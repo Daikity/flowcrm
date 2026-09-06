@@ -1,10 +1,13 @@
+import { useTranslation } from 'react-i18next'
 import { EmptyState } from '@/shared/ui'
 
 export function DashboardEmpty() {
+  const { t } = useTranslation()
+
   return (
     <EmptyState
-      title="Нет данных для dashboard"
-      description="Как только появятся сделки и активность, здесь будет обзор."
+      title={t('dashboard.empty.title')}
+      description={t('dashboard.empty.description')}
     />
   )
 }

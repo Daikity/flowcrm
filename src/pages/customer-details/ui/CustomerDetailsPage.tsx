@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { CustomerAvatar, CustomerStatusBadge } from '@/entities/customer'
 import type { DealStage } from '@/entities/deal'
 import { useGetCustomerQuery, useGetUsersQuery } from '@/shared/api'
@@ -34,6 +35,7 @@ const stageVariant: Record<
 }
 
 export function CustomerDetailsPage() {
+  const { t, i18n } = useTranslation()
   const { id = '' } = useParams()
   const { data, isLoading, isError, error, refetch } = useGetCustomerQuery(id, {
     skip: !id,
@@ -47,12 +49,12 @@ export function CustomerDetailsPage() {
   if (isNotFoundError(error) || (!isLoading && !isError && !data)) {
     return (
       <EmptyState
-        title="Customer not found"
-        description="This customer does not exist or was deleted."
+        title={t('customers.details.notFound.title')}
+        description={t('customers.details.notFound.description')}
         action={
           <Link to="/customers">
             <Button type="button" variant="secondary">
-              Back to customers
+              {t('customers.details.back')}
             </Button>
           </Link>
         }
@@ -63,17 +65,17 @@ export function CustomerDetailsPage() {
   if (isError || !data) {
     return (
       <EmptyState
-        title="Something went wrong."
-        description="Unable to load customer details."
+        title={t('common.error.title')}
+        description={t('customers.details.error.description')}
         action={
           <div className="flex gap-2">
             <Link to="/customers">
               <Button type="button" variant="secondary">
-                Back to customers
+                {t('customers.details.back')}
               </Button>
             </Link>
             <Button type="button" onClick={() => void refetch()}>
-              Try again
+              {t('common.retry')}
             </Button>
           </div>
         }
@@ -90,7 +92,7 @@ export function CustomerDetailsPage() {
           to="/customers"
           className="text-small text-text-secondary hover:text-text-primary"
         >
-          ← Back to customers
+          {t('customers.details.back')}
         </Link>
       </div>
 
@@ -99,7 +101,9 @@ export function CustomerDetailsPage() {
         <div className="space-y-2">
           <Typography variant="h1">{data.company}</Typography>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-body text-text-secondary">{data.industry}</span>
+            <span className="text-body text-text-secondary">
+              {t(`enums.industry.${data.industry}`)}
+            </span>
             <CustomerStatusBadge status={data.status} />
           </div>
         </div>
@@ -108,33 +112,49 @@ export function CustomerDetailsPage() {
       <div className="grid gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Overview</CardTitle>
-            <CardDescription>Key metrics for this customer</CardDescription>
+            <CardTitle>{t('customers.details.overview.title')}</CardTitle>
+            <CardDescription>
+              {t('customers.details.overview.description')}
+            </CardDescription>
           </CardHeader>
           <dl className="grid grid-cols-2 gap-4">
             <div>
-              <dt className="text-small text-text-secondary">Revenue</dt>
-              <dd className="text-h3">{formatCurrency(data.revenue)}</dd>
+              <dt className="text-small text-text-secondary">
+                {t('customers.details.metrics.revenue')}
+              </dt>
+              <dd className="text-h3">
+                {formatCurrency(data.revenue)}
+              </dd>
             </div>
             <div>
-              <dt className="text-small text-text-secondary">Deals</dt>
+              <dt className="text-small text-text-secondary">
+                {t('customers.details.metrics.deals')}
+              </dt>
               <dd className="text-h3">{data.dealsCount}</dd>
             </div>
             <div>
-              <dt className="text-small text-text-secondary">Open deals</dt>
+              <dt className="text-small text-text-secondary">
+                {t('customers.details.metrics.openDeals')}
+              </dt>
               <dd className="text-h3">{data.openDealsCount}</dd>
             </div>
             <div>
-              <dt className="text-small text-text-secondary">Created</dt>
-              <dd className="text-h3">{formatDate(data.createdAt)}</dd>
+              <dt className="text-small text-text-secondary">
+                {t('customers.details.metrics.created')}
+              </dt>
+              <dd className="text-h3">
+                {formatDate(data.createdAt, i18n.language)}
+              </dd>
             </div>
           </dl>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Contact</CardTitle>
-            <CardDescription>Primary contact details</CardDescription>
+            <CardTitle>{t('customers.details.contact.title')}</CardTitle>
+            <CardDescription>
+              {t('customers.details.contact.description')}
+            </CardDescription>
           </CardHeader>
           <div className="space-y-2">
             <p className="font-medium">{data.name}</p>
@@ -142,7 +162,7 @@ export function CustomerDetailsPage() {
             <p className="text-body text-text-secondary">{data.phone}</p>
             {owner ? (
               <p className="pt-2 text-small text-text-secondary">
-                Owner: {owner.name}
+                {t('customers.details.owner', { name: owner.name })}
               </p>
             ) : null}
           </div>
@@ -152,22 +172,24 @@ export function CustomerDetailsPage() {
       <Card className="overflow-hidden p-0">
         <div className="p-5 pb-0">
           <CardHeader>
-            <CardTitle>Deals</CardTitle>
-            <CardDescription>Deals linked to this customer</CardDescription>
+            <CardTitle>{t('customers.details.deals.title')}</CardTitle>
+            <CardDescription>
+              {t('customers.details.deals.description')}
+            </CardDescription>
           </CardHeader>
         </div>
         {data.deals.length === 0 ? (
           <p className="px-5 pb-5 text-body text-text-secondary">
-            No deals yet.
+            {t('customers.details.deals.empty')}
           </p>
         ) : (
           <Table>
             <THead>
               <TR>
-                <TH>Deal</TH>
-                <TH>Stage</TH>
-                <TH>Value</TH>
-                <TH>Expected close</TH>
+                <TH>{t('customers.details.deals.columns.deal')}</TH>
+                <TH>{t('customers.details.deals.columns.stage')}</TH>
+                <TH>{t('customers.details.deals.columns.value')}</TH>
+                <TH>{t('customers.details.deals.columns.expectedClose')}</TH>
               </TR>
             </THead>
             <TBody>
@@ -175,10 +197,12 @@ export function CustomerDetailsPage() {
                 <TR key={deal.id}>
                   <TD className="font-medium">{deal.title}</TD>
                   <TD>
-                    <Badge variant={stageVariant[deal.stage]}>{deal.stage}</Badge>
+                    <Badge variant={stageVariant[deal.stage]}>
+                      {t(`enums.dealStage.${deal.stage}`)}
+                    </Badge>
                   </TD>
                   <TD>{formatCurrency(deal.value)}</TD>
-                  <TD>{formatDate(deal.expectedCloseDate)}</TD>
+                  <TD>{formatDate(deal.expectedCloseDate, i18n.language)}</TD>
                 </TR>
               ))}
             </TBody>
@@ -188,11 +212,15 @@ export function CustomerDetailsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Activity</CardTitle>
-          <CardDescription>Recent activity for this customer</CardDescription>
+          <CardTitle>{t('customers.details.activity.title')}</CardTitle>
+          <CardDescription>
+            {t('customers.details.activity.description')}
+          </CardDescription>
         </CardHeader>
         {data.activities.length === 0 ? (
-          <p className="text-body text-text-secondary">No activity yet.</p>
+          <p className="text-body text-text-secondary">
+            {t('customers.details.activity.empty')}
+          </p>
         ) : (
           <ul className="space-y-3">
             {data.activities.map((activity) => (
@@ -201,7 +229,7 @@ export function CustomerDetailsPage() {
                 <div>
                   <p className="text-body text-text-primary">{activity.message}</p>
                   <p className="text-small text-text-secondary">
-                    {formatDate(activity.createdAt)}
+                    {formatDate(activity.createdAt, i18n.language)}
                   </p>
                 </div>
               </li>

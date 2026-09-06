@@ -1,8 +1,6 @@
-import {
-  DEAL_STAGE_LABEL,
-  DEAL_STAGES,
-  type DealStage,
-} from '@/entities/deal'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import { DEAL_STAGES, type DealStage } from '@/entities/deal'
 import type { User } from '@/entities/user'
 import { Select } from '@/shared/ui'
 
@@ -14,14 +12,6 @@ interface DealFiltersProps {
   onOwnerChange: (value: string) => void
 }
 
-const stageOptions = [
-  { value: '', label: 'All stages' },
-  ...DEAL_STAGES.map((stage) => ({
-    value: stage,
-    label: DEAL_STAGE_LABEL[stage],
-  })),
-]
-
 export function DealFilters({
   stage = '',
   ownerId = '',
@@ -29,10 +19,26 @@ export function DealFilters({
   onStageChange,
   onOwnerChange,
 }: DealFiltersProps) {
-  const ownerOptions = [
-    { value: '', label: 'All owners' },
-    ...users.map((user) => ({ value: user.id, label: user.name })),
-  ]
+  const { t } = useTranslation()
+
+  const stageOptions = useMemo(
+    () => [
+      { value: '', label: t('deals.filters.allStages') },
+      ...DEAL_STAGES.map((item) => ({
+        value: item,
+        label: t(`enums.dealStage.${item}`),
+      })),
+    ],
+    [t],
+  )
+
+  const ownerOptions = useMemo(
+    () => [
+      { value: '', label: t('common.filters.allOwners') },
+      ...users.map((user) => ({ value: user.id, label: user.name })),
+    ],
+    [t, users],
+  )
 
   return (
     <div className="flex flex-wrap gap-2">
