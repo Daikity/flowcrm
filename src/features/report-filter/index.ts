@@ -1,1 +1,1 @@
-export { ReportFilters } from './ui/ReportFilters'
+export { ReportFilters, type ReportFilterValue } from './ui/ReportFilters'

@@ -2,10 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Input, Typography } from '@/shared/ui'
-import {
-  saveAuth,
-  validateCredentials,
-} from '../model/authStorage'
+import { login as establishSession, validateCredentials } from '../model/session'
 
 export function LoginForm() {
   const { t } = useTranslation()
@@ -31,7 +28,7 @@ export function LoginForm() {
       return
     }
 
-    saveAuth()
+    establishSession()
     navigate(from || '/dashboard', { replace: true })
   }
 

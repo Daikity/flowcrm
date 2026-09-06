@@ -4,28 +4,25 @@ import { DEAL_STAGES, type DealStage } from '@/entities/deal'
 import type { User } from '@/entities/user'
 import { DatePicker, Select } from '@/shared/ui'
 
-interface ReportFiltersProps {
+export type ReportFilterValue = {
   from: string
   to: string
   ownerId: string
   stage: DealStage | ''
+}
+
+interface ReportFiltersProps {
+  value: ReportFilterValue
+  onChange: (value: ReportFilterValue) => void
   users: User[]
-  onFromChange: (value: string) => void
-  onToChange: (value: string) => void
-  onOwnerChange: (value: string) => void
-  onStageChange: (value: DealStage | '') => void
+  isFetching?: boolean
 }
 
 export function ReportFilters({
-  from,
-  to,
-  ownerId,
-  stage,
+  value,
+  onChange,
   users,
-  onFromChange,
-  onToChange,
-  onOwnerChange,
-  onStageChange,
+  isFetching = false,
 }: ReportFiltersProps) {
   const { t } = useTranslation()
 
@@ -48,36 +45,47 @@ export function ReportFilters({
     [t, users],
   )
 
+  function patch(partial: Partial<ReportFilterValue>) {
+    onChange({ ...value, ...partial })
+  }
+
   return (
     <div className="flex flex-wrap items-end gap-2">
       <DatePicker
         label={t('reports.filters.from')}
-        value={from}
-        max={to || undefined}
-        onChange={onFromChange}
+        value={value.from}
+        max={value.to || undefined}
+        onChange={(from) => patch({ from })}
         className="w-44"
       />
       <DatePicker
         label={t('reports.filters.to')}
-        value={to}
-        min={from || undefined}
-        onChange={onToChange}
+        value={value.to}
+        min={value.from || undefined}
+        onChange={(to) => patch({ to })}
         className="w-44"
       />
       <Select
         label={t('reports.filters.owner')}
         options={ownerOptions}
-        value={ownerId}
-        onChange={onOwnerChange}
+        value={value.ownerId}
+        onChange={(ownerId) => patch({ ownerId })}
         className="w-44"
       />
       <Select
         label={t('reports.filters.stage')}
         options={stageOptions}
-        value={stage}
-        onChange={(value) => onStageChange(value as DealStage | '')}
+        value={value.stage}
+        onChange={(stage) => patch({ stage: stage as DealStage | '' })}
         className="w-44"
       />
+      {isFetching ? (
+        <span
+          className="mb-2 inline-block size-4 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700"
+          aria-label={t('common.loading')}
+          role="status"
+        />
+      ) : null}
     </div>
   )
 }

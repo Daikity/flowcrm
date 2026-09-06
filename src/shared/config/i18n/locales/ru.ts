@@ -50,6 +50,7 @@ export const ru: TranslationSchema = {
   },
   common: {
     retry: 'Повторить',
+    loading: 'Загрузка',
     select: {
       placeholder: 'Выберите',
     },

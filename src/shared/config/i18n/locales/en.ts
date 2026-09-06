@@ -48,6 +48,7 @@ export const en = {
   },
   common: {
     retry: 'Try again',
+    loading: 'Loading',
     select: {
       placeholder: 'Select',
     },

@@ -1,4 +1,5 @@
 export { baseApi } from './baseApi'
+export { authApi, useAuthProbeQuery, useLazyAuthProbeQuery } from './authApi'
 export { dashboardApi, useGetDashboardQuery } from './dashboardApi'
 export {
   customersApi,

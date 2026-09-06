@@ -1,7 +1,3 @@
-import { useMemo } from 'react'
-import { useSearchParams } from 'react-router-dom'
-import type { DealStage } from '@/entities/deal'
-import type { ReportsParams } from '@/entities/report'
 import { ReportFilters } from '@/features/report-filter'
 import { useGetReportsQuery, useGetUsersQuery } from '@/shared/api'
 import {
@@ -14,52 +10,11 @@ import {
   ReportsRevenueChart,
   ReportsSkeleton,
 } from '@/widgets/reports'
-
-function parseParams(searchParams: URLSearchParams): ReportsParams & {
-  fromInput: string
-  toInput: string
-  ownerInput: string
-  stageInput: DealStage | ''
-} {
-  const stage = searchParams.get('stage') as DealStage | null
-
-  return {
-    from: searchParams.get('from') ?? undefined,
-    to: searchParams.get('to') ?? undefined,
-    ownerId: searchParams.get('ownerId') ?? undefined,
-    stage: stage ?? undefined,
-    fromInput: searchParams.get('from') ?? '',
-    toInput: searchParams.get('to') ?? '',
-    ownerInput: searchParams.get('ownerId') ?? '',
-    stageInput: stage ?? '',
-  }
-}
-
-function setParam(
-  prev: URLSearchParams,
-  key: string,
-  value: string | undefined,
-) {
-  const next = new URLSearchParams(prev)
-  if (!value) {
-    next.delete(key)
-  } else {
-    next.set(key, value)
-  }
-  return next
-}
+import { hasReportsData } from '../model/hasReportsData'
+import { useReportsFilters } from '../model/useReportsFilters'
 
 export function ReportsPage() {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const parsed = useMemo(() => parseParams(searchParams), [searchParams])
-
-  const queryParams: ReportsParams = {
-    from: parsed.from,
-    to: parsed.to,
-    ownerId: parsed.ownerId,
-    stage: parsed.stage,
-  }
-
+  const { filters, queryParams, setFilters } = useReportsFilters()
   const { data: users = [] } = useGetUsersQuery()
   const { data, isLoading, isError, isFetching, refetch } =
     useGetReportsQuery(queryParams)
@@ -76,37 +31,17 @@ export function ReportsPage() {
     return <ReportsEmpty />
   }
 
-  const isEmpty =
-    data.kpis.wonDeals === 0 &&
-    data.kpis.pipelineValue === 0 &&
-    data.pipeline.every((item) => item.count === 0)
+  const isEmpty = !hasReportsData(data)
 
   return (
-    <div className={`space-y-6 ${isFetching ? 'opacity-70' : ''}`}>
+    <div className="space-y-6">
       <ReportsHeader />
 
       <ReportFilters
-        from={parsed.fromInput}
-        to={parsed.toInput}
-        ownerId={parsed.ownerInput}
-        stage={parsed.stageInput}
+        value={filters}
+        onChange={setFilters}
         users={users}
-        onFromChange={(value) =>
-          setSearchParams((prev) => setParam(prev, 'from', value || undefined))
-        }
-        onToChange={(value) =>
-          setSearchParams((prev) => setParam(prev, 'to', value || undefined))
-        }
-        onOwnerChange={(value) =>
-          setSearchParams((prev) =>
-            setParam(prev, 'ownerId', value || undefined),
-          )
-        }
-        onStageChange={(value) =>
-          setSearchParams((prev) =>
-            setParam(prev, 'stage', value || undefined),
-          )
-        }
+        isFetching={isFetching && !isLoading}
       />
 
       {isEmpty ? (

@@ -50,6 +50,7 @@ export const fr: TranslationSchema = {
   },
   common: {
     retry: 'Réessayer',
+    loading: 'Chargement',
     select: {
       placeholder: 'Sélectionner',
     },

@@ -81,6 +81,13 @@ UI → RTK Query → /api/* → MSW → mock data → cache → UI
 - zod-схемы форм — factory с `TFunction` для локализованных ошибок валидации
 - даты и валюта через `Intl` с учётом выбранной локали
 
+### 7. Hardening
+
+- Reports: Zod-валидация URL-фильтров (`stage`, ISO dates, `from <= to` swap), `useReportsFilters`, controlled `ReportFilters`
+- Auth ↔ API: session facade над `authStorage`, `Authorization` headers, 401 → logout (без navigate в API), MSW `/api/auth/probe`
+- Reports UX: empty по датасетам, локальный refetch indicator
+- Quality: `npm run typecheck`, `npm run check`, GitHub Actions CI
+
 ## Команды
 
 ```bash
@@ -88,7 +95,9 @@ npm install
 npm run dev
 npm run build
 npm run lint
+npm run typecheck
 npm run test:run
+npm run check
 ```
 
 Демо-вход: `admin` / `admin`

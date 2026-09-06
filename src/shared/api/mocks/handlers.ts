@@ -46,6 +46,19 @@ import { buildReportsData } from './reports.logic'
 const OPEN_STAGES = new Set(['lead', 'qualified', 'proposal', 'negotiation'])
 
 export const handlers = [
+  http.get('/api/auth/probe', async ({ request }) => {
+    await delay(50)
+    const auth = request.headers.get('Authorization')
+    if (!auth?.startsWith('Bearer ')) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
+    }
+    const token = auth.slice('Bearer '.length)
+    if (!token || token === 'force-401') {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
+    }
+    return HttpResponse.json({ ok: true })
+  }),
+
   http.get('/api/dashboard', async () => {
     await delay(400)
     return HttpResponse.json(dashboardData)

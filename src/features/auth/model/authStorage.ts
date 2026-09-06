@@ -28,6 +28,10 @@ export function isAuthenticated() {
   return Boolean(localStorage.getItem(TOKEN_KEY))
 }
 
+export function getAuthToken() {
+  return localStorage.getItem(TOKEN_KEY)
+}
+
 export function getSessionUser(): User | null {
   const raw = localStorage.getItem(USER_KEY)
   if (!raw) return null
