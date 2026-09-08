@@ -5,6 +5,33 @@
   "folder": "FlowCRM",
   "stack": ["React", "TypeScript", "Vite", "Redux Toolkit", "MSW", "i18next"],
   "summary": "B2B CRM для клиентов, сделок, задач и аналитики",
+  "show": true,
   "featured": true,
-  "status": "online"
+  "status": "online",
+  "case": {
+    "ru": {
+      "summary": "B2B CRM для управления продажами: клиенты, сделки, задачи и аналитика.",
+      "problem": "Нужна была демонстрационная CRM с понятной воронкой, KPI и CRUD без реального бэкенда — чтобы быстро показать продуктовый фронтенд.",
+      "solution": "Собрал приложение на Feature-Sliced Design: dashboard, клиенты и сделки, RTK Query + MSW как mock API, формы на Zod, графики и i18n (en/ru/de/fr).",
+      "result": "Готовое демо с loading/error/empty состояниями, URL-фильтрами и проверяемым стеком — удобно открывать рекрутеру и обсуждать архитектуру.",
+      "metaTitle": "FlowCRM — кейс CRM на React",
+      "metaDescription": "Кейс FlowCRM: B2B CRM на React, Redux Toolkit и MSW. Воронка продаж, клиенты, сделки и аналитика."
+    },
+    "en": {
+      "summary": "B2B CRM for sales: customers, deals, tasks, and analytics.",
+      "problem": "I needed a demo CRM with a clear pipeline, KPIs, and CRUD without a real backend — to showcase product frontend skills quickly.",
+      "solution": "Built with Feature-Sliced Design: dashboard, customers and deals, RTK Query + MSW as a mock API, Zod forms, charts, and i18n (en/ru/de/fr).",
+      "result": "A complete demo with loading/error/empty states, URL filters, and a reviewable stack — easy to open for recruiters and discuss architecture.",
+      "metaTitle": "FlowCRM — React CRM case study",
+      "metaDescription": "FlowCRM case: B2B CRM on React, Redux Toolkit, and MSW. Sales pipeline, customers, deals, and analytics."
+    },
+    "de": {
+      "summary": "B2B-CRM für Vertrieb: Kunden, Deals, Aufgaben und Analytics.",
+      "problem": "Gesucht war eine Demo-CRM mit klarer Pipeline, KPIs und CRUD ohne echtes Backend — um Produkt-Frontend schnell zu zeigen.",
+      "solution": "Umgesetzt mit Feature-Sliced Design: Dashboard, Kunden und Deals, RTK Query + MSW als Mock-API, Zod-Formulare, Charts und i18n (en/ru/de/fr).",
+      "result": "Fertige Demo mit loading/error/empty States, URL-Filtern und nachvollziehbarem Stack — ideal für Reviews und Architektur-Gespräche.",
+      "metaTitle": "FlowCRM — React CRM Case Study",
+      "metaDescription": "FlowCRM Case: B2B-CRM mit React, Redux Toolkit und MSW. Pipeline, Kunden, Deals und Analytics."
+    }
+  }
 }
