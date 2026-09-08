@@ -1,0 +1,10 @@
+{
+  "id": "flowcrm",
+  "title": "FlowCRM",
+  "demoBase": "/demos/flowcrm",
+  "folder": "FlowCRM",
+  "stack": ["React", "TypeScript", "Vite", "Redux Toolkit", "MSW", "i18next"],
+  "summary": "B2B CRM для клиентов, сделок, задач и аналитики",
+  "featured": true,
+  "status": "online"
+}
