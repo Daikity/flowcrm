@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
+  // Подпуть для nginx-прокси портфолио
+  base: '/demos/flowcrm/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

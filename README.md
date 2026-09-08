@@ -103,3 +103,12 @@ npm run check
 Демо-вход: `admin` / `admin`
 
 После входа: `/dashboard`, `/customers`, `/deals`, `/tasks`, `/reports`.
+
+## Портфолио / Docker
+
+- Vite `base`: `/demos/flowcrm/`
+- Router `basename`: из `import.meta.env.BASE_URL`
+- MSW включён и в production (демо без бэкенда)
+- Образ: `Dockerfile` → nginx SPA
+
+В стеке портфолио: http://localhost/demos/flowcrm/

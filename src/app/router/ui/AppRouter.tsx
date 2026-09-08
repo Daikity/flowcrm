@@ -12,9 +12,12 @@ import { TasksPage } from '@/pages/tasks'
 import { UiFoundationPage } from '@/pages/ui-foundation'
 import { AppShell } from '@/widgets/app-shell'
 
+// basename без завершающего слэша (BASE_URL из Vite = /demos/flowcrm/)
+const basename = import.meta.env.BASE_URL.replace(/\/$/, '')
+
 export function AppRouter() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route element={<GuestRoute />}>
           <Route path="/" element={<HomePage />} />
